@@ -2,6 +2,7 @@
 
 #include "ircmessage.h"
 #include "ircsupportinfo.h"
+#include "ircuserid.h"
 
 #include <QObject>
 #include <QByteArray>
@@ -44,6 +45,46 @@ void IrcSession::close()
     this->changeState(Offline);
 }
 
+const QString& IrcSession::nickname() const
+{
+    return this->_currentNickname;
+}
+
+void IrcSession::changeNickname(const QString& nick)
+{   // [rfc2812 3.1.2]
+    if (this->_state == Registering)
+        // server doesn't echo our nick change during registration, so we set it eagerly
+        this->_currentNickname = nick;
+
+    this->sendMessage("NICK", {nick});
+}
+
+bool IrcSession::isMe(const QString &id)
+{
+    if (IrcUserId::isFullyQualified(id))
+        return IrcUserId(id).nickname == this->_currentNickname;
+    else
+        return id == this->_currentNickname;
+}
+
+void IrcSession::oper(const QString& name, const QString& password)
+{   // [rfc2812 3.1.4]
+    this->sendMessage("OPER", {name, password});
+}
+
+void IrcSession::setMode(const QString& modes)
+{
+    this->sendMessage("MODE", {modes});
+}
+
+void IrcSession::quit(const QString& message)
+{
+    if (message.isEmpty())
+        this->sendMessage(QStringLiteral("QUIT"));
+    else
+        this->sendMessage("QUIT", {message});
+}
+
 void IrcSession::sendMessage(const IrcMessage& msg)
 {
     this->sendRaw(msg.render().toUtf8());   // TODO: support other encodings
@@ -63,11 +104,6 @@ void IrcSession::sendRaw(const QByteArray& raw)
 {
     this->_socket.write(raw);
     emit rawLineSent(QString(raw));
-}
-
-void IrcSession::changeNickname(const QString& nick)
-{
-    this->sendMessage("NICK", {nick});
 }
 
 void IrcSession::socketStateChanged(QAbstractSocket::SocketState socketState)
@@ -103,9 +139,7 @@ void IrcSession::handleMessage(const IrcMessage& msg)
     {
         switch (msg.replyCode())
         {
-        case IrcMessage::RPL_WELCOME:
-            this->changeState(Online);
-            break;
+        case IrcMessage::RPL_WELCOME: this->handleRplWelcome(msg); break;
         }
     }
     else
@@ -121,9 +155,20 @@ void IrcSession::handleMessage(const IrcMessage& msg)
     }
 }
 
+void IrcSession::handleNick(const IrcMessage& msg)
+{
+    if (this->isMe(msg.prefix()))
+        this->_currentNickname = msg.params().at(0);
+}
+
 void IrcSession::handlePing(const IrcMessage& msg)
 {
     this->sendMessage("PONG", {msg.params().at(0)});
+}
+
+void IrcSession::handleRplWelcome(const IrcMessage& msg)
+{
+    this->changeState(Online);
 }
 
 void IrcSession::registerUser()

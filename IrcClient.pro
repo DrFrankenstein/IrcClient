@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     debugform.cpp \
     servercfgdialog.cpp \
     sessionform.cpp \
-    identitydialog.cpp
+    identitydialog.cpp \
+    ircuserid.cpp
 
 HEADERS  += mainwindow.h \
     ircsession.h \
@@ -29,7 +30,8 @@ HEADERS  += mainwindow.h \
     debugform.h \
     servercfgdialog.h \
     sessionform.h \
-    identitydialog.h
+    identitydialog.h \
+    ircuserid.h
 
 INCLUDEPATH += C:/Users/Carl/Documents/src/lib/boost_1_58_0
 

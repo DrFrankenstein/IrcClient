@@ -36,7 +36,15 @@ public:
     void open();
     void close();
 
+    const QString& nickname() const;
     void changeNickname(const QString& nick);
+    bool isMe(const QString& id);
+
+    void oper(const QString& name, const QString& password);
+
+    void setMode(const QString& modes);
+
+    void quit(const QString& message = QString());
 
 signals:
     void stateChanged(IrcSession::State state);
@@ -65,6 +73,7 @@ private:
 
     QString _username;
     QList<QString> _nicknames;
+    QString _currentNickname;
     QString _realname;
 
     bool _invisible;
@@ -78,7 +87,10 @@ private:
     void changeState(State state);
 
     void handleMessage(const IrcMessage& msg);
+    void handleNick(const IrcMessage& msg);
     void handlePing(const IrcMessage& msg);
+
+    void handleRplWelcome(const IrcMessage& msg);
 
     void registerUser();
     void pong(const QString& server);
