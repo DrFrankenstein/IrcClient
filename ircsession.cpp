@@ -146,6 +146,7 @@ void IrcSession::handleMessage(const IrcMessage& msg)
     {
         typedef void (IrcSession::*Handler)(const IrcMessage&);
         static QMap<QString, Handler> handlers {
+          {"NICK", &IrcSession::handleNick},
           {"PING", &IrcSession::handlePing}
         };
 
