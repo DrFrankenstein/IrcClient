@@ -73,12 +73,12 @@ void IrcSession::oper(const QString& name, const QString& password)
 }
 
 void IrcSession::setMode(const QString& modes)
-{
+{   // [rfc2812 3.1.5]
     this->sendMessage("MODE", {modes});
 }
 
 void IrcSession::quit(const QString& message)
-{
+{   // [rfc2812 3.1.7]
     if (message.isEmpty())
         this->sendMessage(QStringLiteral("QUIT"));
     else
@@ -157,23 +157,26 @@ void IrcSession::handleMessage(const IrcMessage& msg)
 }
 
 void IrcSession::handleNick(const IrcMessage& msg)
-{
+{   // [rfc2812 3.1.2]
     if (this->isMe(msg.prefix()))
         this->_currentNickname = msg.params().at(0);
 }
 
 void IrcSession::handlePing(const IrcMessage& msg)
-{
+{   // [rfc2812 3.7.2, 3.7.3]
     this->sendMessage("PONG", {msg.params().at(0)});
 }
 
 void IrcSession::handleRplWelcome(const IrcMessage& msg)
-{
+{   // [rfc2812 3.1]
     this->changeState(Online);
+    // it would be useful to grab and save our nick!user@host here, 
+    // but few servers actually implement rfc2812 completely. even ircd-seven doesn't do it.
+    // rfc1459 does not define RPL_WELCOME at all.
 }
 
 void IrcSession::registerUser()
-{
+{   // [rfc2812 3.1]
     this->changeState(Registering);
 
     if (!this->_password.isEmpty())
