@@ -1,0 +1,1 @@
+[![Build Status](https://travis-ci.org/DrFrankenstein/IrcClient.svg)](https://travis-ci.org/DrFrankenstein/IrcClient)
