@@ -6,6 +6,6 @@ install:
   - sudo apt-get install qt54base qt54tools
 
 script:
-  - qmake -v
-  - qmake IrcClient.pro
+  - /opt/qt54/bin/qmake qt=qt5 -v
+  - /opt/qt54/bin/qmake qt=qt5 IrcClient.pro
   - make
