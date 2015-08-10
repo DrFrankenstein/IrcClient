@@ -3,7 +3,7 @@ language: cpp
 install:
   - sudo add-apt-repository --yes ppa:beineri/opt-qt541
   - sudo apt-get update -qq
-  - sudo apt-get install qt54base
+  - sudo apt-get install qt54base qt54tools
 
 script:
   - qmake -qt=qt5 -v
