@@ -8,6 +8,7 @@
 #include <QByteArray>
 #include <QTcpSocket>
 #include <QMap>
+#include <QHash>
 #include <utility>
 
 IrcSession::IrcSession(const QString& address, quint16 port,
@@ -145,7 +146,7 @@ void IrcSession::handleMessage(const IrcMessage& msg)
     else
     {
         typedef void (IrcSession::*Handler)(const IrcMessage&);
-        static QMap<QString, Handler> handlers {
+        static QHash<QString, Handler> handlers {
           {"NICK", &IrcSession::handleNick},
           {"PING", &IrcSession::handlePing}
         };
