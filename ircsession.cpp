@@ -17,7 +17,7 @@ IrcSession::IrcSession(const QString& address, quint16 port,
     : QObject(parent), _address(address), _port(port), _password(password),
       _username(username), _nicknames(nicknames), _realname(realname),
       _invisible(invisible), _wallops(wallops),
-      _socket(this), _state(Offline)
+      _state(Offline), _socket(this)
 {
     QObject::connect(&this->_socket, SIGNAL(readyRead()),
                      this, SLOT(socketReadyRead()));
@@ -114,6 +114,7 @@ void IrcSession::socketStateChanged(QAbstractSocket::SocketState socketState)
     case QAbstractSocket::ConnectedState:
         this->registerUser();
         break;
+    default: qt_noop();
     }
 }
 
@@ -141,6 +142,7 @@ void IrcSession::handleMessage(const IrcMessage& msg)
         switch (msg.replyCode())
         {
         case IrcMessage::RPL_WELCOME: this->handleRplWelcome(msg); break;
+        default: qt_noop();
         }
     }
     else
@@ -174,6 +176,7 @@ void IrcSession::handleRplWelcome(const IrcMessage& msg)
     // it would be useful to grab and save our nick!user@host here, 
     // but few servers actually implement rfc2812 completely. even ircd-seven doesn't do it.
     // rfc1459 does not define RPL_WELCOME at all.
+    Q_UNUSED(msg);
 }
 
 void IrcSession::registerUser()

@@ -43,7 +43,8 @@ bool IrcUserId::parse(const QString& raw)
     if (!this->parseUsername(it, end))
         return false;
 
-    if (it == end || *it != '@');
+    if (it == end || *it != '@')
+        return false;
 
     return this->parseHost(it, end) && it == end;
 }
@@ -83,7 +84,7 @@ bool IrcUserId::parseHost(QString::const_iterator& it, const QString::const_iter
     QString::const_iterator start = it;
 
     // We don't validate that the host conforms to RFCs 2812 and 1123 besides from the character set.
-    while (it != end && it->isLetter() || it->isDigit() || *it == '.' || *it == '-' || *it == ':')
+    while ((it != end && it->isLetter()) || it->isDigit() || *it == '.' || *it == '-' || *it == ':')
         ++it;
 
     this->host = QString(start, it - start);
@@ -103,6 +104,5 @@ bool IrcUserId::isNickChar(QChar ch, bool allowDigits)
             || ch == '{'
             || ch == '}'
             || ch == '|'
-            || (!allowDigits
-                && ch.isNumber() || ch == '-');
+            || (allowDigits && (ch.isNumber() || ch == '-'));
 }

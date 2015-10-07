@@ -254,7 +254,7 @@ public:
     const QString& prefix() const;
     bool isNumeric() const;
     const QString& command() const;
-    const ReplyCode replyCode() const;
+    ReplyCode replyCode() const;
     const QStringList& params() const;
     QString render() const;
 

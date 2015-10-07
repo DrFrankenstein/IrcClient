@@ -81,7 +81,7 @@ const QString& IrcMessage::command() const
     return this->_command.string;
 }
 
-const IrcMessage::ReplyCode IrcMessage::replyCode() const
+IrcMessage::ReplyCode IrcMessage::replyCode() const
 {
     return this->_command.replyCode;
 }
@@ -367,7 +367,7 @@ QString IrcMessage::render() const
 
     if (this->isNumeric())
     {
-        QString str = QString("%1").arg(this->_command.replyCode, 3, 10, QChar('0'));
+        QString str = QString("%1").arg(static_cast<int>(this->_command.replyCode), 3, 10, QChar('0'));
         out.append(str);
     }
     else
@@ -382,7 +382,7 @@ QString IrcMessage::render() const
         {
             if (!i.hasNext())
                 // TODO: warn.
-                ;
+                qt_noop();
             out.append(':');
         }
 

@@ -7,11 +7,11 @@
 #include <QVector>
 
 IrcSupportInfo::IrcSupportInfo()
-    : casemapping(Rfc1459),
-      channellen(200),
-      chantypes({QChar('#'), QChar('&')}),
+    : chantypes({QChar('#'), QChar('&')}),
       modes(3),
-      nicklen(9)
+      nicklen(9),
+      casemapping(Rfc1459),
+      channellen(200)
 {
     this->prefix.insert('@', 'o');
     this->prefix.insert('+', 'v');
