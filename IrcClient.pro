@@ -33,14 +33,12 @@ HEADERS  += mainwindow.h \
     identitydialog.h \
     ircuserid.h
 
-INCLUDEPATH += C:/Users/Carl/Documents/src/lib/boost_1_58_0
-
 FORMS    += mainwindow.ui \
     debugform.ui \
     servercfgdialog.ui \
     sessionform.ui \
     identitydialog.ui
 
-#QMAKE_CXXFLAGS += -W4
+QMAKE_CXXFLAGS += -W4
 #QMAKE_CXXFLAGS += -Wall
 #QMAKE_CXXFLAGS += -analyze
