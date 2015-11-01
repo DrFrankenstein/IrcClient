@@ -39,6 +39,6 @@ FORMS    += mainwindow.ui \
     sessionform.ui \
     identitydialog.ui
 
-QMAKE_CXXFLAGS += -W4
+#QMAKE_CXXFLAGS += -W4
 #QMAKE_CXXFLAGS += -Wall
 #QMAKE_CXXFLAGS += -analyze
