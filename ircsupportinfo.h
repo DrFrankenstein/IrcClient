@@ -114,7 +114,7 @@ private:
     template <typename ParamType>
         void doClearParam(ParamType IrcSupportInfo::* param, const ParamType& dflt = ParamType());
     template <typename ParamType, ParamType IrcSupportInfo::* var, const ParamType& dflt>
-        void IrcSupportInfo::doClearParam();
+        void doClearParam();
     void clearChanmodes();
 
     // generic parsers/setters
