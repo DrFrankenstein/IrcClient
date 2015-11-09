@@ -39,6 +39,14 @@ FORMS    += mainwindow.ui \
     sessionform.ui \
     identitydialog.ui
 
-#QMAKE_CXXFLAGS += -W4
-#QMAKE_CXXFLAGS += -Wall
-#QMAKE_CXXFLAGS += -analyze
+win32-msvc*:{
+    # Uncomment this if you want static analysis warnings. Much slower, but useful when adding new code.
+    #QMAKE_CXXFLAGS += -analyze
+
+    # I usually compile with a custom makespec with -W4 (instead of the default -W3),
+    # but I need certain noisy warnings disabled.
+    # C4127: Conditional expression is constant. Triggered by several included templates (QVector among many) that test template parameters.
+    QMAKE_CXXFLAGS += -wd4127
+    # C4718: recursive call has no side effects, deleting. Triggered by included template code.
+    QMAKE_CXXFLAGS += -wd4718
+}
