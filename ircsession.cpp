@@ -5,6 +5,7 @@
 #include "ircuserid.h"
 
 #include <QObject>
+#include <QStringList>
 #include <QByteArray>
 #include <QTcpSocket>
 #include <QMap>
@@ -142,6 +143,7 @@ void IrcSession::handleMessage(const IrcMessage& msg)
         switch (msg.replyCode())
         {
         case IrcMessage::RPL_WELCOME: this->handleRplWelcome(msg); break;
+        case IrcMessage::RPL_ISUPPORT: this->handleRplISupport(msg); break;
         default: qt_noop();
         }
     }
@@ -177,6 +179,12 @@ void IrcSession::handleRplWelcome(const IrcMessage& msg)
     // but few servers actually implement rfc2812 completely. even ircd-seven doesn't do it.
     // rfc1459 does not define RPL_WELCOME at all.
     Q_UNUSED(msg);
+}
+
+void IrcSession::handleRplISupport(const IrcMessage & msg)
+{   // <http://www.irc.org/tech_docs/005.html>
+    const QStringList& params = msg.params();
+    this->_support.parseISupport(params.constBegin() + 1, params.constEnd()); // + 1 to skip nickname
 }
 
 void IrcSession::registerUser()

@@ -13,8 +13,6 @@
 #include <QMap>
 #include <QSet>
 
-#include <boost/range/iterator_range.hpp>
-
 class IrcSupportInfo
 {
 public:
@@ -103,7 +101,7 @@ private:
 
     static QHash<QString, std::function<void(IrcSupportInfo*)> > defaults;
 
-    void parseToken(const QStringRef &token);
+    void parseToken(const QString& token);
     void setParam(const QString& name, const QString& value);
 
     // clearing and defaults
@@ -116,6 +114,8 @@ private:
     template <typename ParamType, ParamType IrcSupportInfo::* var, const ParamType& dflt>
         void doClearParam();
     void clearChanmodes();
+    void removeToken(QSet<QChar> IrcSupportInfo::*var, QChar c);
+    void clearChidlen();
 
     // generic parsers/setters
     template <bool IrcSupportInfo::* var>

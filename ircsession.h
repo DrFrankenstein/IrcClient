@@ -91,6 +91,7 @@ private:
     void handlePing(const IrcMessage& msg);
 
     void handleRplWelcome(const IrcMessage& msg);
+    void handleRplISupport(const IrcMessage& msg);
 
     void registerUser();
     void pong(const QString& server);

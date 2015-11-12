@@ -21,7 +21,6 @@ using namespace std::placeholders;
 using boost::find_if;
 
 QHash<QString, function<void(IrcSupportInfo*)> > IrcSupportInfo::defaults;
-//QHash<QString, void (IrcSupportInfo::*)()> IrcSupportInfo::defaults;
 
 IrcSupportInfo::IrcSupportInfo()
 {
@@ -35,11 +34,15 @@ IrcSupportInfo::~IrcSupportInfo()
 {
 }
 
-void IrcSupportInfo::parseToken(const QStringRef& token)
+void IrcSupportInfo::parseToken(const QString& token)
 {
+    if (token.contains(' '))
+        // final "are supported by this server" or equivalent.
+        return;
+
     int idxequal = token.indexOf('=');
-    QString name = token.left(idxequal).toString(),
-            value = unescapeValue(token.mid(idxequal + 1));
+    QString name = token.left(idxequal),
+            value = unescapeValue(token.midRef(idxequal + 1));
 
     if (name[0] == '-')
         this->clearParam(name);
@@ -51,10 +54,6 @@ void IrcSupportInfo::setParam(const QString& name, const QString& value)
 {
     typedef void (IrcSupportInfo::*Handler)(const QString&);
 
-    // So what is this insanity? I's pretty much me getting carried away at keeping it DRY.
-    // We have a few generic parsers (setTokensParam, setUnsignedParam, etc.), and we specialize them by binding them
-    // to the fields that they affect. Some other parsers are already specialized, but need to pass through 'bind'
-    // anyway to take their 'this' as a parameter.
 #   pragma warning(disable: 640)    // "construction of local static object is not thread-safe"; this class is only used in one thread.
     static QHash<QString, Handler> map = {
         { "CASEMAPPING", &IrcSupportInfo::setCasemappingParam },
@@ -124,7 +123,7 @@ void IrcSupportInfo::setDefaults()
     // prevent us from using initializer-lists for collections, among other things.
     this->setDefault("CASEMAPPING", &IrcSupportInfo::casemapping, Rfc1459);
     this->setDefault("CHANLIMIT", &IrcSupportInfo::chanlimit);
-    defaults.insert("CHANMODES", bind(&IrcSupportInfo::clearChanmodes, this));
+    defaults.insert("CHANMODES", bind(&IrcSupportInfo::clearChanmodes, _1));
     this->setDefault("CHANELLEN", &IrcSupportInfo::channellen, 200U);
     this->setDefault<QSet<QChar> >("CHANTYPES", &IrcSupportInfo::chantypes, { '#', '&' });
     this->setDefault("EXCEPTS", &IrcSupportInfo::excepts);
@@ -133,6 +132,7 @@ void IrcSupportInfo::setDefaults()
     this->setDefault("KICKLEN", &IrcSupportInfo::kicklen);
     this->setDefault("MAXLIST", &IrcSupportInfo::maxlist);
     this->setDefault("MODES", &IrcSupportInfo::modes, 3U);
+    this->setDefault("NETWORK", &IrcSupportInfo::network);
     this->setDefault("NICKLEN", &IrcSupportInfo::nicklen, 9U);
     this->setDefault<QList<pair<QChar, QChar> > >("PREFIX", &IrcSupportInfo::prefix, { { 'o','@' },{ 'v','+' } });
     this->setDefault("SAFELIST", &IrcSupportInfo::safelist);
@@ -140,6 +140,25 @@ void IrcSupportInfo::setDefaults()
     this->setDefault("STD", &IrcSupportInfo::std);
     this->setDefault("TARGMAX", &IrcSupportInfo::targmax);
     this->setDefault("TOPICLEN", &IrcSupportInfo::topiclen);
+
+    defaults.insert("WALLCHOPS", bind(&IrcSupportInfo::removeToken, _1, &IrcSupportInfo::statusmsg, '@'));
+    defaults.insert("WALLVOICES", bind(&IrcSupportInfo::removeToken, _1, &IrcSupportInfo::statusmsg, '+'));
+    this->setDefault("ELIST", &IrcSupportInfo::elist);
+    defaults.insert("CHIDLEN", bind(&IrcSupportInfo::clearChidlen, _1));
+    this->setDefault("SILENCE", &IrcSupportInfo::silence);
+    this->setDefault("RFC2812", &IrcSupportInfo::rfc2812);
+    this->setDefault("PENALTY", &IrcSupportInfo::penalty);
+    this->setDefault("FNC", &IrcSupportInfo::fnc);
+    this->setDefault("AWAYLEN", &IrcSupportInfo::awaylen);
+    this->setDefault("USERIP", &IrcSupportInfo::userip);
+    this->setDefault("CPRIVMSG", &IrcSupportInfo::cprivmsg);
+    this->setDefault("CNOTICE", &IrcSupportInfo::cnotice);
+    this->setDefault("MAXTARGETS", &IrcSupportInfo::maxtargets, 1U);
+    this->setDefault("KNOCK", &IrcSupportInfo::knock);
+    this->setDefault("VCHANS", &IrcSupportInfo::vchans);
+    this->setDefault("WATCH", &IrcSupportInfo::watch);
+    this->setDefault("WHOX", &IrcSupportInfo::whox);
+    this->setDefault("CALLERID", &IrcSupportInfo::callerid);
 }
 
 template <typename ParamType>
@@ -160,6 +179,16 @@ void IrcSupportInfo::clearChanmodes()
     this->chanmodesB.clear();
     this->chanmodesC.clear();
     this->chanmodesD.clear();
+}
+
+void IrcSupportInfo::removeToken(QSet<QChar> IrcSupportInfo::* var, QChar c)
+{
+    (this->*var).remove(c);
+}
+
+void IrcSupportInfo::clearChidlen()
+{
+    this->idchan.remove('!');
 }
 
 template <bool IrcSupportInfo::* var>
@@ -333,7 +362,7 @@ QList<pair<QString, int> > IrcSupportInfo::parsePairList(const QString& value)
     {
         int colon = item.indexOf(':');
         if (colon == -1) continue;  // missing ':'
-        auto left = item.mid(0, colon - 1);
+        auto left = item.mid(0, colon);
         auto right = item.mid(colon + 1);
 
         int number;
