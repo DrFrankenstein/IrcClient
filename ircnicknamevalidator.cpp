@@ -22,7 +22,10 @@ QValidator::State IrcNicknameValidator::validate(QString& input, int& pos) const
     QChar first = input[0];
     if (!(first.isLetter() || isSpecial(first))) return QValidator::Invalid;
 
-    return all_of(input.begin() + 1, input.end(), [](QChar c) {
+    // 'this' does not need to be captured in this lambda but
+    // gcc 4.6-4.7 requires it for static function calls.
+    // <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=51494>
+    return all_of(input.begin() + 1, input.end(), [this](QChar c) {
         return c.isLetter() || c.isDigit() || isSpecial(c) || c == '-';
     })? QValidator::Acceptable : QValidator::Invalid;
 
