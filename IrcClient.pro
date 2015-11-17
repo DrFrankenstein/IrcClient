@@ -21,7 +21,9 @@ SOURCES += main.cpp\
     servercfgdialog.cpp \
     sessionform.cpp \
     identitydialog.cpp \
-    ircuserid.cpp
+    ircuserid.cpp \
+    ircchannel.cpp \
+    ircnicknamevalidator.cpp
 
 HEADERS  += mainwindow.h \
     ircsession.h \
@@ -31,7 +33,9 @@ HEADERS  += mainwindow.h \
     servercfgdialog.h \
     sessionform.h \
     identitydialog.h \
-    ircuserid.h
+    ircuserid.h \
+    ircchannel.h \
+    ircnicknamevalidator.h
 
 FORMS    += mainwindow.ui \
     debugform.ui \
@@ -39,9 +43,12 @@ FORMS    += mainwindow.ui \
     sessionform.ui \
     identitydialog.ui
 
+RESOURCES += \
+    resources.qrc
+
 win32-msvc*:{
     # Uncomment this if you want static analysis warnings. Much slower, but useful when adding new code.
-    #QMAKE_CXXFLAGS += -analyze
+    QMAKE_CXXFLAGS += -analyze
 
     # I usually compile with a custom makespec with -W4 (instead of the default -W3),
     # but I need certain noisy warnings disabled.

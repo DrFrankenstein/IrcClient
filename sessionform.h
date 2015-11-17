@@ -14,7 +14,7 @@ class SessionForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit SessionForm(IrcSession* session, QWidget* parent = 0);
+    explicit SessionForm(IrcSession* session, QWidget* parent = nullptr);
     ~SessionForm();
 
 private slots:

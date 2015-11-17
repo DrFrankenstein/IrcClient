@@ -1,14 +1,42 @@
 #include "identitydialog.h"
 #include "ui_identitydialog.h"
 
+#include "ircnicknamevalidator.h"
+
 #include <QStringList>
 #include <QSettings>
+#include <QListWidget>
+#include <QListWidgetItem>
+#include <QStyledItemDelegate>
+#include <QLineEdit>
+
+// Custom item delegate that adds an IrcNicknameValidator to the line edit when editing a nickname entry.
+class NicknameItemDelegate : public QStyledItemDelegate
+{
+public:
+    NicknameItemDelegate(QObject* parent = nullptr) : QStyledItemDelegate(parent)
+    {
+    }
+
+    virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
+    {
+        QWidget* widget = QStyledItemDelegate::createEditor(parent, option, index);
+
+        QLineEdit* editor = qobject_cast<QLineEdit*>(widget);
+        if (editor)
+            editor->setValidator(new IrcNicknameValidator(editor));
+
+        return widget;
+    }
+};
 
 IdentityDialog::IdentityDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::IdentityDialog)
 {
     ui->setupUi(this);
+    ui->nicknamesListWidget->setItemDelegate(new NicknameItemDelegate(this));
+
     this->load();
 }
 
@@ -24,22 +52,15 @@ void IdentityDialog::accept()
         settings.setValue("username", ui->userNameLineEdit->text());
         settings.setValue("realname", ui->realNameLineEdit->text());
 
-#if 0
-        settings.beginWriteArray("nicknames");
-        for (int i = 0; i < ui->nicknamesListWidget->count(); i++)
-        {
-            settings.setArrayIndex(i);
-            settings.setValue("nickname", ui->nicknamesListWidget->item(i)->text());
-        }
-        settings.endArray();
-#endif
-
        QStringList nicks;
-       for (int i = 0; i < ui->nicknamesListWidget->count(); i++)
+       IrcNicknameValidator validator;
+       int count = ui->nicknamesListWidget->count();
+       for (int i = 0; i < count; i++)
        {
            QString nick = ui->nicknamesListWidget->item(i)->text().trimmed();
            if (!nick.isEmpty()) nicks.append(nick);
        }
+
        settings.setValue("nicknames", nicks);
     settings.endGroup();
 
@@ -56,7 +77,37 @@ void IdentityDialog::load()
     settings.endGroup();
 }
 
+void IdentityDialog::moveCurrentNickname(int diff)
+{
+    QListWidget* widget = ui->nicknamesListWidget;
+    int row = widget->currentRow();
+    QListWidgetItem* item = widget->takeItem(row);
+    widget->insertItem(row + diff, item);
+    widget->setCurrentItem(item);
+}
+
 void IdentityDialog::on_addToolButton_clicked()
 {
-    ui->nicknamesListWidget->addItem("");
+    QListWidget* widget = ui->nicknamesListWidget;
+    auto item = new QListWidgetItem(widget);
+    item->setFlags(item->flags() | Qt::ItemIsEditable);
+    widget->setCurrentItem(item);
+    widget->editItem(item);
 }
+
+void IdentityDialog::on_deleteToolButton_clicked()
+{
+    for (QListWidgetItem* item : ui->nicknamesListWidget->selectedItems())
+        delete item;
+}
+
+void IdentityDialog::on_upToolButton_clicked()
+{
+    this->moveCurrentNickname(-1);
+}
+
+void IdentityDialog::on_downToolButton_clicked()
+{
+    this->moveCurrentNickname(1);
+}
+

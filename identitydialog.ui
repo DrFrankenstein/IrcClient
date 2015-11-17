@@ -73,12 +73,20 @@
           <property name="text">
            <string>+</string>
           </property>
+          <property name="icon">
+           <iconset theme="list-add" resource="resources.qrc">
+            <normaloff>:/icons/resources/icons/list-add.png</normaloff>:/icons/resources/icons/list-add.png</iconset>
+          </property>
          </widget>
         </item>
         <item>
          <widget class="QToolButton" name="deleteToolButton">
           <property name="text">
            <string>-</string>
+          </property>
+          <property name="icon">
+           <iconset theme="list-remove" resource="resources.qrc">
+            <normaloff>:/icons/resources/icons/list-remove.png</normaloff>:/icons/resources/icons/list-remove.png</iconset>
           </property>
          </widget>
         </item>
@@ -87,12 +95,20 @@
           <property name="text">
            <string>▲</string>
           </property>
+          <property name="icon">
+           <iconset theme="go-up" resource="resources.qrc">
+            <normaloff>:/icons/resources/icons/go-up.png</normaloff>:/icons/resources/icons/go-up.png</iconset>
+          </property>
          </widget>
         </item>
         <item>
          <widget class="QToolButton" name="downToolButton">
           <property name="text">
            <string>▼</string>
+          </property>
+          <property name="icon">
+           <iconset theme="go-down" resource="resources.qrc">
+            <normaloff>:/icons/resources/icons/go-down.png</normaloff>:/icons/resources/icons/go-down.png</iconset>
           </property>
          </widget>
         </item>
@@ -121,7 +137,9 @@
   <tabstop>upToolButton</tabstop>
   <tabstop>downToolButton</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

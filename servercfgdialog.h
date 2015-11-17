@@ -12,7 +12,7 @@ class ServerCfgDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ServerCfgDialog(QWidget *parent = 0);
+    explicit ServerCfgDialog(QWidget *parent = nullptr);
     ~ServerCfgDialog();
 
     QString address() const;

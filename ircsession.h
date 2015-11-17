@@ -28,7 +28,7 @@ public:
     explicit IrcSession(const QString& address, quint16 port,
                         const QString& username, const QStringList& nicknames, const QString& realname,
                         const QString& password = QString(), bool invisible = true, bool wallops = false,
-                        QObject* parent = 0);
+                        QObject* parent = nullptr);
     ~IrcSession();
 
     const IrcSupportInfo& support() const;
