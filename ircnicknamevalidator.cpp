@@ -9,7 +9,7 @@
 using std::all_of;
 
 IrcNicknameValidator::IrcNicknameValidator(QObject* parent, int nicklen)
-    : QValidator(parent), nicklen(nicklen)
+    : QValidator(parent), _nicklen(nicklen)
 {
 }
 
@@ -17,7 +17,7 @@ QValidator::State IrcNicknameValidator::validate(QString& input, int& pos) const
 {
     if (input.isEmpty()) return QValidator::Intermediate;
 
-    if (nicklen && input.size() > nicklen) return QValidator::Invalid;
+    if (_nicklen && input.size() > _nicklen) return QValidator::Invalid;
 
     QChar first = input[0];
     if (!(first.isLetter() || isSpecial(first))) return QValidator::Invalid;

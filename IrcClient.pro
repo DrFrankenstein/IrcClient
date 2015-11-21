@@ -23,7 +23,9 @@ SOURCES += main.cpp\
     identitydialog.cpp \
     ircuserid.cpp \
     ircchannel.cpp \
-    ircnicknamevalidator.cpp
+    ircnicknamevalidator.cpp \
+    ircuser.cpp \
+    ircchatbuffer.cpp
 
 HEADERS  += mainwindow.h \
     ircsession.h \
@@ -35,7 +37,9 @@ HEADERS  += mainwindow.h \
     identitydialog.h \
     ircuserid.h \
     ircchannel.h \
-    ircnicknamevalidator.h
+    ircnicknamevalidator.h \
+    ircuser.h \
+    ircchatbuffer.h
 
 FORMS    += mainwindow.ui \
     debugform.ui \

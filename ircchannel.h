@@ -2,6 +2,7 @@
 #define IRCCHANNEL_H
 
 #include <QObject>
+#include <QString>
 
 class IrcChannel : public QObject
 {
@@ -12,6 +13,9 @@ public:
 signals:
 
 public slots:
+
+private:
+    QString _name, _topic;
 };
 
 #endif // IRCCHANNEL_H

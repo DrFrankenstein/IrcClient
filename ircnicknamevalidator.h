@@ -14,7 +14,7 @@ public:
     static bool isSpecial(QChar c);
 
 private:
-    int nicklen;
+    int _nicklen;
 };
 
 #endif // IRCNICKNAMEVALIDATOR_H
