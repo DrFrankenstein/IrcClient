@@ -13,3 +13,8 @@ script:
   - /opt/qt55/bin/qmake qt=qt5 -v
   - /opt/qt55/bin/qmake qt=qt5 IrcClient.pro
   - make
+  
+notifications:
+  irc:  
+    channels: "irc.oftc.net#genirc"
+    skip_join: true
