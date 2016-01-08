@@ -1,5 +1,5 @@
-#ifndef IRCUSERID_H
-#define IRCUSERID_H
+#ifndef IRC_USERID_H
+#define IRC_USERID_H
 
 #include <QString>
 
@@ -32,4 +32,4 @@ private:
 
 }
 
-#endif // IRCUSERID_H
+#endif // IRC_USERID_H

@@ -1,9 +1,9 @@
-#ifndef DEBUGFORM_H
-#define DEBUGFORM_H
+#ifndef GUI_DEBUGFORM_H
+#define GUI_DEBUGFORM_H
 
 #include <QWidget>
 
-#include "../irc/ircsession.h"
+#include "../irc/session.h"
 
 class QBrush;
 class QString;
@@ -39,4 +39,4 @@ private:
 
 }
 
-#endif // DEBUGFORM_H
+#endif // GUI_DEBUGFORM_H

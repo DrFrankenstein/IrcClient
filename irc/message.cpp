@@ -1,4 +1,4 @@
-#include "ircmessage.h"
+#include "message.h"
 
 #include <QByteArray>
 #include <QString>

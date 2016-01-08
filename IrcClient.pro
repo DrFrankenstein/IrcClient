@@ -14,31 +14,31 @@ CONFIG += c++11
 
 SOURCES += main.cpp\
         gui/mainwindow.cpp \
-    irc/ircsession.cpp \
-    irc/ircmessage.cpp \
-    irc/ircsupportinfo.cpp \
+    irc/session.cpp \
+    irc/message.cpp \
+    irc/supportinfo.cpp \
     gui/debugform.cpp \
     gui/servercfgdialog.cpp \
     gui/sessionform.cpp \
     gui/identitydialog.cpp \
-    irc/ircuserid.cpp \
-    irc/ircchannel.cpp \
-    irc/ircnicknamevalidator.cpp \
-    irc/ircuser.cpp \
+    irc/userid.cpp \
+    irc/channel.cpp \
+    irc/nicknamevalidator.cpp \
+    irc/user.cpp \
     gui/ircchatbuffer.cpp
 
 HEADERS  += gui/mainwindow.h \
-    irc/ircsession.h \
-    irc/ircmessage.h \
-    irc/ircsupportinfo.h \
+    irc/session.h \
+    irc/message.h \
+    irc/supportinfo.h \
     gui/debugform.h \
     gui/servercfgdialog.h \
     gui/sessionform.h \
     gui/identitydialog.h \
-    irc/ircuserid.h \
-    irc/ircchannel.h \
-    irc/ircnicknamevalidator.h \
-    irc/ircuser.h \
+    irc/userid.h \
+    irc/channel.h \
+    irc/nicknamevalidator.h \
+    irc/user.h \
     gui/ircchatbuffer.h
 
 FORMS    += gui/mainwindow.ui \

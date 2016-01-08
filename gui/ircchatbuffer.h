@@ -1,5 +1,5 @@
-#ifndef IRCCHATBUFFER_H
-#define IRCCHATBUFFER_H
+#ifndef GUI_IRCCHATBUFFER_H
+#define GUI_IRCCHATBUFFER_H
 
 #include <QObject>
 #include <QTextEdit>
@@ -17,4 +17,4 @@ public:
 
 }
 
-#endif // IRCCHATBUFFER_H
+#endif // GUI_IRCCHATBUFFER_H

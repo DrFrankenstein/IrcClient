@@ -1,5 +1,5 @@
-#ifndef IDENTITYDIALOG_H
-#define IDENTITYDIALOG_H
+#ifndef GUI_IDENTITYDIALOG_H
+#define GUI_IDENTITYDIALOG_H
 
 #include <QDialog>
 #include <QAbstractItemDelegate>
@@ -37,4 +37,4 @@ private:
 
 }
 
-#endif // IDENTITYDIALOG_H
+#endif // GUI_IDENTITYDIALOG_H

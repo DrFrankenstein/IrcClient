@@ -4,7 +4,7 @@
 #include "servercfgdialog.h"
 #include "identitydialog.h"
 #include "sessionform.h"
-#include "irc/ircsession.h"
+#include "irc/session.h"
 #include "debugform.h"
 
 #include <QString>

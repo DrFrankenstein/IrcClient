@@ -1,5 +1,5 @@
-#ifndef SERVERCFGDIALOG_H
-#define SERVERCFGDIALOG_H
+#ifndef GUI_SERVERCFGDIALOG_H
+#define GUI_SERVERCFGDIALOG_H
 
 #include <QDialog>
 
@@ -30,4 +30,4 @@ private:
 
 }
 
-#endif // SERVERCFGDIALOG_H
+#endif // GUI_SERVERCFGDIALOG_H

@@ -1,9 +1,9 @@
-#ifndef SESSIONFORM_H
-#define SESSIONFORM_H
+#ifndef GUI_SESSIONFORM_H
+#define GUI_SESSIONFORM_H
 
 #include <QWidget>
 
-#include "../irc/ircsession.h"
+#include "../irc/session.h"
 
 namespace Gui
 {
@@ -31,4 +31,4 @@ private:
 
 }
 
-#endif // SERVERFORM_H
+#endif // GUI_SESSIONFORM_H

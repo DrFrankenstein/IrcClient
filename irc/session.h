@@ -1,5 +1,5 @@
-#ifndef IRCSESSION_H
-#define IRCSESSION_H
+#ifndef IRC_SESSION_H
+#define IRC_SESSION_H
 
 #include <QObject>
 #include <QString>
@@ -11,10 +11,10 @@
 #include <QSharedPointer>
 #include <initializer_list>
 
-#include "ircmessage.h"
-#include "ircsupportinfo.h"
-#include "ircchannel.h"
-#include "ircuser.h"
+#include "message.h"
+#include "supportinfo.h"
+#include "channel.h"
+#include "user.h"
 
 class QByteArray;
 
@@ -127,4 +127,4 @@ private:
 
 }
 
-#endif // IRCSESSION_H
+#endif // IRC_SESSION_H

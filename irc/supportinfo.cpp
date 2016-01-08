@@ -1,4 +1,4 @@
-#include "ircsupportinfo.h"
+#include "supportinfo.h"
 
 #include <utility>
 #include <functional>

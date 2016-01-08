@@ -1,5 +1,5 @@
-#ifndef IRCSUPPORTINFO_H
-#define IRCSUPPORTINFO_H
+#ifndef IRC_SUPPORTINFO_H
+#define IRC_SUPPORTINFO_H
 
 #include <functional>
 #include <utility>
@@ -154,4 +154,4 @@ private:
 
 }
 
-#endif // IRCSUPPORTINFO_H
+#endif // IRC_SUPPORTINFO_H

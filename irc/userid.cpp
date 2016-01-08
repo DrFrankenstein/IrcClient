@@ -1,4 +1,4 @@
-#include "ircuserid.h"
+#include "userid.h"
 
 #include <QString>
 #include <algorithm>

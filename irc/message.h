@@ -1,5 +1,5 @@
-#ifndef IRCMESSAGE_H
-#define IRCMESSAGE_H
+#ifndef IRC_MESSAGE_H
+#define IRC_MESSAGE_H
 
 #include <QByteArray>
 #include <QString>
@@ -288,4 +288,4 @@ private:
 
 }
 
-#endif // IRCMESSAGE_H
+#endif // IRC_MESSAGE_H

@@ -1,9 +1,9 @@
-#include "ircsession.h"
+#include "session.h"
 
-#include "ircmessage.h"
-#include "ircsupportinfo.h"
-#include "ircuserid.h"
-#include "ircchannel.h"
+#include "message.h"
+#include "supportinfo.h"
+#include "userid.h"
+#include "channel.h"
 
 #include <QObject>
 #include <QStringList>
