@@ -8,7 +8,7 @@ class IrcChannel : public QObject
 {
     Q_OBJECT
 public:
-    explicit IrcChannel(QObject *parent = nullptr);
+    explicit IrcChannel(const QString& name, QObject *parent = nullptr);
 
 signals:
 

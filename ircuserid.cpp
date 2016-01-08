@@ -3,6 +3,8 @@
 #include <QString>
 #include <algorithm>
 
+using std::find;
+
 IrcUserId::IrcUserId()
 {
 
@@ -26,8 +28,8 @@ QString IrcUserId::render() const
 bool IrcUserId::isFullyQualified(const QString& raw)
 {   // Just checks for a '!', then a '@' after it.
     auto end = raw.constEnd();
-    auto bang = std::find(raw.constBegin(), end, '!');
-    return std::find(bang, end, '@') != end;
+    auto bang = find(raw.constBegin(), end, '!');
+    return find(bang, end, '@') != end;
 }
 
 bool IrcUserId::parse(const QString& raw)

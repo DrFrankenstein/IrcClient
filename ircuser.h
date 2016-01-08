@@ -8,7 +8,7 @@ class IrcUser : public QObject
 {
     Q_OBJECT
 public:
-    explicit IrcUser(QObject *parent = 0);
+    explicit IrcUser(QString userid, QObject *parent = 0);
 
 signals:
 

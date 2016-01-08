@@ -3,15 +3,20 @@
 
 #include <QObject>
 #include <QString>
+#include <QStringList>
+#include <QList>
 #include <QMap>
+#include <QHash>
 #include <QTcpSocket>
+#include <QSharedPointer>
 #include <initializer_list>
 
 #include "ircmessage.h"
 #include "ircsupportinfo.h"
+#include "ircchannel.h"
+#include "ircuser.h"
 
 class QByteArray;
-class IrcMessage;
 
 class IrcSession : public QObject
 {
@@ -46,11 +51,25 @@ public:
 
     void quit(const QString& message = QString());
 
+    void join(const QString& channel, const QString& key = QString());
+    void join(const QStringList& channels, const QStringList& keys = QStringList());
+
+    void part(const QString& channel, const QString& message = QString());
+    void part(const QStringList& channels, const QString& message = QString());
+    void partAll();
+
 signals:
     void stateChanged(IrcSession::State state);
 
     void rawLineReceived(QString line);
     void rawLineSent(QString line);
+
+    void quitReceived(QString user, QString message);
+
+    void joinReceived(QString user, QString channel);
+    void joinReceived(QWeakPointer<IrcUser> user, QString channel);
+    void partReceived(QString user, QString channel, QString message);
+    void partReceived(QWeakPointer<IrcUser> user, QString message);
 
 public slots:
     void sendMessage(const IrcMessage& msg);
@@ -84,17 +103,23 @@ private:
     QTcpSocket _socket;
     IrcSupportInfo _support;
 
+    QHash<QString, QSharedPointer<IrcChannel> > _channels;
+    QHash<QString, QSharedPointer<IrcUser> > _users;
+
     void changeState(State state);
 
     void handleMessage(const IrcMessage& msg);
     void handleNick(const IrcMessage& msg);
     void handlePing(const IrcMessage& msg);
+    void handleJoin(const IrcMessage& msg);
 
     void handleRplWelcome(const IrcMessage& msg);
     void handleRplISupport(const IrcMessage& msg);
 
     void registerUser();
     void pong(const QString& server);
+
+    QSharedPointer<IrcUser> getUser(const QString& id);
 };
 
 #endif // IRCSESSION_H
