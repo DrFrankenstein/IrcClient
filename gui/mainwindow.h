@@ -6,6 +6,9 @@
 class QWidget;
 class QString;
 
+namespace Gui
+{
+
 namespace Ui {
 class MainWindow;
 }
@@ -28,5 +31,7 @@ private:
 
     void openSession(const QString& address, quint16 port, const QString& password, bool invisible, bool wallops);
 };
+
+}
 
 #endif // MAINWINDOW_H

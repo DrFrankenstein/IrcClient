@@ -14,7 +14,10 @@
 #include <QSharedPointer>
 #include <utility>
 
-IrcSession::IrcSession(const QString& address, quint16 port,
+namespace Irc
+{
+
+Session::Session(const QString& address, quint16 port,
                        const QString& username, const QStringList& nicknames, const QString& realname,
                        const QString& password, bool invisible, bool wallops, QObject* parent)
     : QObject(parent), _address(address), _port(port), _password(password),
@@ -28,33 +31,33 @@ IrcSession::IrcSession(const QString& address, quint16 port,
                      this, SLOT(socketStateChanged(QAbstractSocket::SocketState)));
 }
 
-IrcSession::~IrcSession()
+Session::~Session()
 {
 }
 
-const IrcSupportInfo& IrcSession::support() const
+const SupportInfo& Session::support() const
 {
     return this->_support;
 }
 
-void IrcSession::open()
+void Session::open()
 {
     this->_socket.connectToHost(this->_address, this->_port);
     this->changeState(Connecting);
 }
 
-void IrcSession::close()
+void Session::close()
 {
     this->_socket.close();
     this->changeState(Offline);
 }
 
-const QString& IrcSession::nickname() const
+const QString& Session::nickname() const
 {
     return this->_currentNickname;
 }
 
-void IrcSession::changeNickname(const QString& nick)
+void Session::changeNickname(const QString& nick)
 {   // [rfc2812 3.1.2]
     if (this->_state == Registering)
         // server doesn't echo our nick change during registration, so we set it eagerly
@@ -63,25 +66,25 @@ void IrcSession::changeNickname(const QString& nick)
     this->sendMessage("NICK", {nick});
 }
 
-bool IrcSession::isMe(const QString &id)
+bool Session::isMe(const QString &id)
 {
-    if (IrcUserId::isFullyQualified(id))
-        return IrcUserId(id).nickname == this->_currentNickname;
+    if (UserId::isFullyQualified(id))
+        return UserId(id).nickname == this->_currentNickname;
     else
         return id == this->_currentNickname;
 }
 
-void IrcSession::oper(const QString& name, const QString& password)
+void Session::oper(const QString& name, const QString& password)
 {   // [rfc2812 3.1.4]
     this->sendMessage("OPER", {name, password});
 }
 
-void IrcSession::setMode(const QString& modes)
+void Session::setMode(const QString& modes)
 {   // [rfc2812 3.1.5]
     this->sendMessage("MODE", {modes});
 }
 
-void IrcSession::quit(const QString& message)
+void Session::quit(const QString& message)
 {   // [rfc2812 3.1.7]
     if (message.isEmpty())
         this->sendMessage(QStringLiteral("QUIT"));
@@ -89,7 +92,7 @@ void IrcSession::quit(const QString& message)
         this->sendMessage("QUIT", {message});
 }
 
-void IrcSession::join(const QString & channel, const QString & key)
+void Session::join(const QString & channel, const QString & key)
 {   // [rfc2812 3.2.1]
     if (key.isEmpty())
         this->sendMessage("JOIN", { channel });
@@ -97,12 +100,12 @@ void IrcSession::join(const QString & channel, const QString & key)
         this->sendMessage("JOIN", { channel, key });
 }
 
-void IrcSession::join(const QStringList & channels, const QStringList & keys)
+void Session::join(const QStringList & channels, const QStringList & keys)
 {   // [rfc2812 3.2.1]
     this->join(channels.join(','), keys.join(','));
 }
 
-void IrcSession::part(const QString & channel, const QString & message)
+void Session::part(const QString & channel, const QString & message)
 {   // [rfc2812 3.2.2]
     if (message.isEmpty())
         this->sendMessage("PART", { channel });
@@ -110,38 +113,38 @@ void IrcSession::part(const QString & channel, const QString & message)
         this->sendMessage("PART", { channel, message });
 }
 
-void IrcSession::part(const QStringList & channels, const QString & message)
+void Session::part(const QStringList & channels, const QString & message)
 {   // [rfc2812 3.2.2]
     this->part(channels.join(','), message);
 }
 
-void IrcSession::partAll()
+void Session::partAll()
 {   // [rfc2812 3.2.1]
     this->join("0");
 }
 
-void IrcSession::sendMessage(const IrcMessage& msg)
+void Session::sendMessage(const Message& msg)
 {
     this->sendRaw(msg.render().toUtf8());   // TODO: support other encodings
 }
 
-void IrcSession::sendMessage(const QString& command, const std::initializer_list<QString> params, const QMap<QString, QString>& tags, const QString& prefix)
+void Session::sendMessage(const QString& command, const std::initializer_list<QString> params, const QMap<QString, QString>& tags, const QString& prefix)
 {
-    this->sendMessage(IrcMessage(command, params, tags, prefix));
+    this->sendMessage(Message(command, params, tags, prefix));
 }
 
-void IrcSession::sendMessage(IrcMessage::ReplyCode replyCode, const std::initializer_list<QString> params, const QMap<QString, QString>& tags, const QString& prefix)
+void Session::sendMessage(Message::ReplyCode replyCode, const std::initializer_list<QString> params, const QMap<QString, QString>& tags, const QString& prefix)
 {
-    this->sendMessage(IrcMessage(replyCode, params, tags, prefix));
+    this->sendMessage(Message(replyCode, params, tags, prefix));
 }
 
-void IrcSession::sendRaw(const QByteArray& raw)
+void Session::sendRaw(const QByteArray& raw)
 {
     this->_socket.write(raw);
     emit rawLineSent(QString(raw));
 }
 
-void IrcSession::socketStateChanged(QAbstractSocket::SocketState socketState)
+void Session::socketStateChanged(QAbstractSocket::SocketState socketState)
 {
     switch (socketState)
     {
@@ -152,41 +155,41 @@ void IrcSession::socketStateChanged(QAbstractSocket::SocketState socketState)
     }
 }
 
-void IrcSession::socketReadyRead()
+void Session::socketReadyRead()
 {
     while (this->_socket.canReadLine())
     {
         QByteArray raw = this->_socket.readLine();
         emit rawLineReceived(QString(raw));
-        IrcMessage msg (raw);
+        Message msg (raw);
         this->handleMessage(msg);
     }
 }
 
-void IrcSession::changeState(State state)
+void Session::changeState(State state)
 {
     this->_state = state;
     emit stateChanged(state);
 }
 
-void IrcSession::handleMessage(const IrcMessage& msg)
+void Session::handleMessage(const Message& msg)
 {
     if (msg.isNumeric())
     {
         switch (msg.replyCode())
         {
-        case IrcMessage::RPL_WELCOME: this->handleRplWelcome(msg); break;
-        case IrcMessage::RPL_ISUPPORT: this->handleRplISupport(msg); break;
+        case Message::RPL_WELCOME: this->handleRplWelcome(msg); break;
+        case Message::RPL_ISUPPORT: this->handleRplISupport(msg); break;
         default: qt_noop();
         }
     }
     else
     {
-        typedef void (IrcSession::*Handler)(const IrcMessage&);
+        typedef void (Session::*Handler)(const Message&);
         static QHash<QString, Handler> handlers {
-          {"NICK", &IrcSession::handleNick},
-          {"PING", &IrcSession::handlePing},
-          {"JOIN", &IrcSession::handleJoin}
+          {"NICK", &Session::handleNick},
+          {"PING", &Session::handlePing},
+          {"JOIN", &Session::handleJoin}
         };
 
         Handler handler = handlers.value(msg.command());
@@ -195,18 +198,18 @@ void IrcSession::handleMessage(const IrcMessage& msg)
     }
 }
 
-void IrcSession::handleNick(const IrcMessage& msg)
+void Session::handleNick(const Message& msg)
 {   // [rfc2812 3.1.2]
     if (this->isMe(msg.prefix()))
         this->_currentNickname = msg.params().at(0);
 }
 
-void IrcSession::handlePing(const IrcMessage& msg)
+void Session::handlePing(const Message& msg)
 {   // [rfc2812 3.7.2, 3.7.3]
     this->sendMessage("PONG", {msg.params().at(0)});
 }
 
-void IrcSession::handleJoin(const IrcMessage& msg)
+void Session::handleJoin(const Message& msg)
 {   // [rfc2812 3.2.1]
     const QString& userid = msg.prefix();
     if (msg.params().size() == 0)
@@ -216,16 +219,16 @@ void IrcSession::handleJoin(const IrcMessage& msg)
 
     if (this->isMe(userid))
     {
-        QSharedPointer<IrcChannel> channel (new IrcChannel(channelname, this));
+        QSharedPointer<Channel> channel (new Channel(channelname, this));
         this->_channels.insert(channelname, channel);
     }
 
     emit joinReceived(userid, channelname);
-    QSharedPointer<IrcUser> user = this->getUser(userid);
+    QSharedPointer<User> user = this->getUser(userid);
     emit joinReceived(user, channelname);
 }
 
-void IrcSession::handleRplWelcome(const IrcMessage& msg)
+void Session::handleRplWelcome(const Message& msg)
 {   // [rfc2812 3.1]
     this->changeState(Online);
     // it would be useful to grab and save our nick!user@host here, 
@@ -234,13 +237,13 @@ void IrcSession::handleRplWelcome(const IrcMessage& msg)
     Q_UNUSED(msg);
 }
 
-void IrcSession::handleRplISupport(const IrcMessage & msg)
+void Session::handleRplISupport(const Message & msg)
 {   // <http://www.irc.org/tech_docs/005.html>
     const QStringList& params = msg.params();
     this->_support.parseISupport(params.constBegin() + 1, params.constEnd()); // + 1 to skip nickname
 }
 
-void IrcSession::registerUser()
+void Session::registerUser()
 {   // [rfc2812 3.1]
     this->changeState(Registering);
 
@@ -255,11 +258,13 @@ void IrcSession::registerUser()
     this->sendMessage("USER", {this->_username, QString::number(modes), QStringLiteral("*"), this->_realname});
 }
 
-QSharedPointer<IrcUser> IrcSession::getUser(const QString& id)
+QSharedPointer<User> Session::getUser(const QString& id)
 {
-    QString nick = IrcUserId(id).nickname;
-    QSharedPointer<IrcUser> user = this->_users[nick];
-    if (!user) user.reset(new IrcUser(id, this));
+    QString nick = UserId(id).nickname;
+    QSharedPointer<User> user = this->_users[nick];
+    if (!user) user.reset(new User(id, this));
 
     return user;
+}
+
 }

@@ -10,7 +10,10 @@
 #include <QStyledItemDelegate>
 #include <QLineEdit>
 
-// Custom item delegate that adds an IrcNicknameValidator to the line edit when editing a nickname entry.
+namespace Gui
+{
+
+// Custom item delegate that adds an NicknameValidator to the line edit when editing a nickname entry.
 class NicknameItemDelegate : public QStyledItemDelegate
 {
 public:
@@ -24,7 +27,7 @@ public:
 
         QLineEdit* editor = qobject_cast<QLineEdit*>(widget);
         if (editor)
-            editor->setValidator(new IrcNicknameValidator(editor));
+            editor->setValidator(new Irc::NicknameValidator(editor));
 
         return widget;
     }
@@ -53,7 +56,7 @@ void IdentityDialog::accept()
         settings.setValue("realname", ui->realNameLineEdit->text());
 
        QStringList nicks;
-       IrcNicknameValidator validator;
+       Irc::NicknameValidator validator;
        int count = ui->nicknamesListWidget->count();
        for (int i = 0; i < count; i++)
        {
@@ -111,3 +114,4 @@ void IdentityDialog::on_downToolButton_clicked()
     this->moveCurrentNickname(1);
 }
 
+}

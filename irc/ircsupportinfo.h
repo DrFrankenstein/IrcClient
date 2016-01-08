@@ -13,7 +13,10 @@
 #include <QMap>
 #include <QSet>
 
-class IrcSupportInfo
+namespace Irc
+{
+
+class SupportInfo
 {
 public:
     enum CaseMapping
@@ -21,13 +24,13 @@ public:
         Ascii, Rfc1459, StrictRfc1459
     };
 
-    IrcSupportInfo();
-    ~IrcSupportInfo();
+    SupportInfo();
+    ~SupportInfo();
 
     template <typename InputIterator>
     void parseISupport(const InputIterator& begin, const InputIterator& end)
     {
-        std::for_each(begin, end, std::bind(&IrcSupportInfo::parseToken,
+        std::for_each(begin, end, std::bind(&SupportInfo::parseToken,
                                             this, std::placeholders::_1));
     }
 
@@ -99,7 +102,7 @@ private:
 
     QHash<QString, QString> tokens;
 
-    static QHash<QString, std::function<void(IrcSupportInfo*)> > defaults;
+    static QHash<QString, std::function<void(SupportInfo*)> > defaults;
 
     void parseToken(const QString& token);
     void setParam(const QString& name, const QString& value);
@@ -108,28 +111,28 @@ private:
     void clearParam(const QString& name);
     void setDefaults();
     template <typename ParamType>
-        void setDefault(const QString& name, ParamType IrcSupportInfo::* param, const ParamType& dflt = ParamType());
+        void setDefault(const QString& name, ParamType SupportInfo::* param, const ParamType& dflt = ParamType());
     template <typename ParamType>
-        void doClearParam(ParamType IrcSupportInfo::* param, const ParamType& dflt = ParamType());
-    template <typename ParamType, ParamType IrcSupportInfo::* var, const ParamType& dflt>
+        void doClearParam(ParamType SupportInfo::* param, const ParamType& dflt = ParamType());
+    template <typename ParamType, ParamType SupportInfo::* var, const ParamType& dflt>
         void doClearParam();
     void clearChanmodes();
-    void removeToken(QSet<QChar> IrcSupportInfo::*var, QChar c);
+    void removeToken(QSet<QChar> SupportInfo::*var, QChar c);
     void clearChidlen();
 
     // generic parsers/setters
-    template <bool IrcSupportInfo::* var>
+    template <bool SupportInfo::* var>
         void setBoolParam(const QString& unused);
-    template <QChar IrcSupportInfo::* var, char dflt = '\0'>
+    template <QChar SupportInfo::* var, char dflt = '\0'>
         void setCharParam(const QString& value);
-    template <uint IrcSupportInfo::* var>
+    template <uint SupportInfo::* var>
         void setUnsignedParam(const QString& value);
-    template <QString IrcSupportInfo::* var>
+    template <QString SupportInfo::* var>
         void setStringParam(const QString& value);
-    void setTokensParam(QSet<QChar> IrcSupportInfo::* param, const QString& value);
-    template <QSet<QChar> IrcSupportInfo::* var>
+    void setTokensParam(QSet<QChar> SupportInfo::* param, const QString& value);
+    template <QSet<QChar> SupportInfo::* var>
         void setTokensParam(const QString& value);
-    template <QSet<QChar> IrcSupportInfo::* var, char c>
+    template <QSet<QChar> SupportInfo::* var, char c>
         void addToken(const QString& unused);
 
     // parameter-specific parsers/setters
@@ -148,5 +151,7 @@ private:
     static QString unescapeValue(const QStringRef& range);
     static QChar unescapeChar(QString::const_iterator& it, const QString::const_iterator& end);
 };
+
+}
 
 #endif // IRCSUPPORTINFO_H

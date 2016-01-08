@@ -4,6 +4,9 @@
 #include <QDialog>
 #include <QAbstractItemDelegate>
 
+namespace Gui
+{
+
 namespace Ui {
 class IdentityDialog;
 }
@@ -31,5 +34,7 @@ private:
     void load();
     void moveCurrentNickname(int diff);
 };
+
+}
 
 #endif // IDENTITYDIALOG_H

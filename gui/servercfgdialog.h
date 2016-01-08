@@ -3,6 +3,9 @@
 
 #include <QDialog>
 
+namespace Gui
+{
+
 namespace Ui {
 class ServerCfgDialog;
 }
@@ -24,5 +27,7 @@ public:
 private:
     Ui::ServerCfgDialog *ui;
 };
+
+}
 
 #endif // SERVERCFGDIALOG_H

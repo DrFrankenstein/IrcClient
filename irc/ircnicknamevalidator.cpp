@@ -8,12 +8,15 @@
 
 using std::all_of;
 
-IrcNicknameValidator::IrcNicknameValidator(QObject* parent, int nicklen)
+namespace Irc
+{
+
+NicknameValidator::NicknameValidator(QObject* parent, int nicklen)
     : QValidator(parent), _nicklen(nicklen)
 {
 }
 
-QValidator::State IrcNicknameValidator::validate(QString& input, int& pos) const
+QValidator::State NicknameValidator::validate(QString& input, int& pos) const
 {
     if (input.isEmpty()) return QValidator::Intermediate;
 
@@ -32,7 +35,7 @@ QValidator::State IrcNicknameValidator::validate(QString& input, int& pos) const
     Q_UNUSED(pos);
 }
 
-bool IrcNicknameValidator::isSpecial(QChar c)
+bool NicknameValidator::isSpecial(QChar c)
 {
     return c == '['
         || c == ']'
@@ -43,4 +46,6 @@ bool IrcNicknameValidator::isSpecial(QChar c)
         || c == '{'
         || c == '|'
         || c == '}';
+}
+
 }

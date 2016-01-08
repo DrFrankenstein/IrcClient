@@ -5,34 +5,37 @@
 
 using std::find;
 
-IrcUserId::IrcUserId()
+namespace Irc
+{
+
+UserId::UserId()
 {
 
 }
 
-IrcUserId::IrcUserId(const QString& raw)
+UserId::UserId(const QString& raw)
 {
     this->parse(raw);
 }
 
-IrcUserId::~IrcUserId()
+UserId::~UserId()
 {
 
 }
 
-QString IrcUserId::render() const
+QString UserId::render() const
 {
     return QString("%1!%2@%3").arg(this->nickname, this->username, this->host);
 }
 
-bool IrcUserId::isFullyQualified(const QString& raw)
+bool UserId::isFullyQualified(const QString& raw)
 {   // Just checks for a '!', then a '@' after it.
     auto end = raw.constEnd();
     auto bang = find(raw.constBegin(), end, '!');
     return find(bang, end, '@') != end;
 }
 
-bool IrcUserId::parse(const QString& raw)
+bool UserId::parse(const QString& raw)
 {
     auto it = raw.constBegin(), end = raw.constEnd();
 
@@ -51,7 +54,7 @@ bool IrcUserId::parse(const QString& raw)
     return this->parseHost(it, end) && it == end;
 }
 
-bool IrcUserId::parseNickname(QString::const_iterator& it, const QString::const_iterator& end)
+bool UserId::parseNickname(QString::const_iterator& it, const QString::const_iterator& end)
 {   // [rfc2812]
     // nickname   =  ( letter / special ) *8( letter / digit / special / "-" )
     QString::const_iterator start = it;
@@ -69,7 +72,7 @@ bool IrcUserId::parseNickname(QString::const_iterator& it, const QString::const_
     return true;
 }
 
-bool IrcUserId::parseUsername(QString::const_iterator& it, const QString::const_iterator& end)
+bool UserId::parseUsername(QString::const_iterator& it, const QString::const_iterator& end)
 {
     QString::const_iterator start = it;
 
@@ -81,7 +84,7 @@ bool IrcUserId::parseUsername(QString::const_iterator& it, const QString::const_
     return it != start;
 }
 
-bool IrcUserId::parseHost(QString::const_iterator& it, const QString::const_iterator& end)
+bool UserId::parseHost(QString::const_iterator& it, const QString::const_iterator& end)
 {
     QString::const_iterator start = it;
 
@@ -94,7 +97,7 @@ bool IrcUserId::parseHost(QString::const_iterator& it, const QString::const_iter
     return it != start;
 }
 
-bool IrcUserId::isNickChar(QChar ch, bool allowDigits)
+bool UserId::isNickChar(QChar ch, bool allowDigits)
 {
     return ch.isLetter()
             || ch == '['
@@ -107,4 +110,6 @@ bool IrcUserId::isNickChar(QChar ch, bool allowDigits)
             || ch == '}'
             || ch == '|'
             || (allowDigits && (ch.isNumber() || ch == '-'));
+}
+
 }

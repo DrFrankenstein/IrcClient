@@ -12,6 +12,9 @@
 #include <QStringList>
 #include <QMdiSubWindow>
 
+namespace Gui
+{
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -42,7 +45,7 @@ void MainWindow::openSession(const QString& address, quint16 port, const QString
     QSettings settings;
     settings.beginGroup("identity");
 
-    IrcSession* session = new IrcSession(address, port,
+    Irc::Session* session = new Irc::Session(address, port,
                                          settings.value("username", "GenericIrcUser").toString(),
                                          settings.value("nicknames", QStringList("Guest1")).toStringList(),
                                          settings.value("realname", "Generic IRC User").toString(),
@@ -54,4 +57,6 @@ void MainWindow::openSession(const QString& address, quint16 port, const QString
     ui->mdiArea->addSubWindow(deb)->show();
 
     session->open();
+}
+
 }

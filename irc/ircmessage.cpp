@@ -5,12 +5,15 @@
 #include <QStringList>
 #include <QMap>
 
+namespace Irc
+{
+
 //IrcMessage::IrcMessage()
 //{
 //    this->_command.replyCode = NON_NUMERIC;
 //}
 
-IrcMessage::IrcMessage(const QByteArray& raw)
+Message::Message(const QByteArray& raw)
 {
     if (!this->parse(QString(raw)))
     {   // make invalid
@@ -19,20 +22,20 @@ IrcMessage::IrcMessage(const QByteArray& raw)
     }
 }
 
-IrcMessage::IrcMessage(const QString& command, const QStringList& params, const QMap<QString, QString>& tags, const QString& prefix)
+Message::Message(const QString& command, const QStringList& params, const QMap<QString, QString>& tags, const QString& prefix)
     : _tags(tags), _prefix(prefix), _params(params)
 {
     this->_command.string = command;
     this->_command.replyCode = NON_NUMERIC;
 }
 
-IrcMessage::IrcMessage(ReplyCode replyCode, const QStringList& params, const QMap<QString, QString>& tags, const QString& prefix)
+Message::Message(ReplyCode replyCode, const QStringList& params, const QMap<QString, QString>& tags, const QString& prefix)
     : _tags(tags), _prefix(prefix), _params(params)
 {
     this->_command.replyCode = replyCode;
 }
 
-IrcMessage::IrcMessage(const QString& command, const std::initializer_list<QString> params, const QMap<QString, QString>& tags, const QString& prefix)
+Message::Message(const QString& command, const std::initializer_list<QString> params, const QMap<QString, QString>& tags, const QString& prefix)
     : _tags(tags), _prefix(prefix)
 {
     this->_command.string = command;
@@ -42,7 +45,7 @@ IrcMessage::IrcMessage(const QString& command, const std::initializer_list<QStri
         this->_params.append(param);
 }
 
-IrcMessage::IrcMessage(ReplyCode replyCode, const std::initializer_list<QString> params, const QMap<QString, QString>& tags, const QString& prefix)
+Message::Message(ReplyCode replyCode, const std::initializer_list<QString> params, const QMap<QString, QString>& tags, const QString& prefix)
     : _tags(tags), _prefix(prefix)
 {
     this->_command.replyCode = replyCode;
@@ -51,47 +54,47 @@ IrcMessage::IrcMessage(ReplyCode replyCode, const std::initializer_list<QString>
         this->_params.append(param);
 }
 
-IrcMessage::~IrcMessage()
+Message::~Message()
 {
 }
 
-bool IrcMessage::isValid() const
+bool Message::isValid() const
 {
     return !(this->_command.string.isEmpty()
              && this->_command.replyCode == NON_NUMERIC);
 }
 
-const QMap<QString, QString>& IrcMessage::tags() const
+const QMap<QString, QString>& Message::tags() const
 {
     return this->_tags;
 }
 
-const QString& IrcMessage::prefix() const
+const QString& Message::prefix() const
 {
     return this->_prefix;
 }
 
-bool IrcMessage::isNumeric() const
+bool Message::isNumeric() const
 {
     return this->_command.string.isEmpty();
 }
 
-const QString& IrcMessage::command() const
+const QString& Message::command() const
 {
     return this->_command.string;
 }
 
-IrcMessage::ReplyCode IrcMessage::replyCode() const
+Message::ReplyCode Message::replyCode() const
 {
     return this->_command.replyCode;
 }
 
-const QStringList& IrcMessage::params() const
+const QStringList& Message::params() const
 {
     return this->_params;
 }
 
-bool IrcMessage::parse(const QString &raw)
+bool Message::parse(const QString &raw)
 {
     auto it = raw.constBegin(), end = raw.constEnd();
 
@@ -127,7 +130,7 @@ bool IrcMessage::parse(const QString &raw)
     return true;
 }
 
-bool IrcMessage::parseTags(QString::const_iterator& it, const QString::const_iterator& end)
+bool Message::parseTags(QString::const_iterator& it, const QString::const_iterator& end)
 {   // [ircv3.2] <tags> ::= <tag> [';' <tag>]*
     if (it == end)
         return false;   // nothing after '@'
@@ -143,7 +146,7 @@ bool IrcMessage::parseTags(QString::const_iterator& it, const QString::const_ite
     return true;
 }
 
-bool IrcMessage::parseTag(QString::const_iterator& it, const QString::const_iterator& end)
+bool Message::parseTag(QString::const_iterator& it, const QString::const_iterator& end)
 {   // [ircv3.2] <tag> ::= <key> ['=' <escaped value>]
 
     QString key, value;
@@ -161,7 +164,7 @@ bool IrcMessage::parseTag(QString::const_iterator& it, const QString::const_iter
     return true;
 }
 
-bool IrcMessage::parseTagKey(QString::const_iterator& it, const QString::const_iterator& end, QString& key)
+bool Message::parseTagKey(QString::const_iterator& it, const QString::const_iterator& end, QString& key)
 {   // [ircv3.2]
     // <key>    ::= [ <vendor> '/' ] <sequence of letters, digits, hyphens (`-`)>
     // <vendor> ::= <host>
@@ -207,7 +210,7 @@ bool IrcMessage::parseTagKey(QString::const_iterator& it, const QString::const_i
     return true;
 }
 
-bool IrcMessage::parseTagValue(QString::const_iterator& it, const QString::const_iterator& end, QString& value)
+bool Message::parseTagValue(QString::const_iterator& it, const QString::const_iterator& end, QString& value)
 {   // [ircv3.2] <escaped value> ::= <sequence of any characters except NUL, CR, LF, semicolon (`;`) and SPACE>
     for (; it != end; ++it)
     {
@@ -236,7 +239,7 @@ bool IrcMessage::parseTagValue(QString::const_iterator& it, const QString::const
     return true;
 }
 
-bool IrcMessage::parsePrefix(QString::const_iterator& it, const QString::const_iterator& end)
+bool Message::parsePrefix(QString::const_iterator& it, const QString::const_iterator& end)
 {   // [rfc2812] prefix =  servername / ( nickname [ [ "!" user ] "@" host ] )
     // deviation: we read everything until space. the address will be parsed later if needed.
 
@@ -255,7 +258,7 @@ bool IrcMessage::parsePrefix(QString::const_iterator& it, const QString::const_i
     return true;
 }
 
-bool IrcMessage::parseCommand(QString::const_iterator& it, const QString::const_iterator& end)
+bool Message::parseCommand(QString::const_iterator& it, const QString::const_iterator& end)
 {   // [rfc2812] command =  1*letter / 3digit
     if (it == end)
         return false;
@@ -287,7 +290,7 @@ bool IrcMessage::parseCommand(QString::const_iterator& it, const QString::const_
     return true;
 }
 
-bool IrcMessage::parseParams(QString::const_iterator& it, const QString::const_iterator& end)
+bool Message::parseParams(QString::const_iterator& it, const QString::const_iterator& end)
 {   // [rfc2812]
     // params =  *14( SPACE middle ) [ SPACE ":" trailing ]
     //        =/ 14( SPACE middle ) [ SPACE [ ":" ] trailing ]
@@ -320,7 +323,7 @@ bool IrcMessage::parseParams(QString::const_iterator& it, const QString::const_i
     return true;
 }
 
-bool IrcMessage::parseParam(QString::const_iterator& it, const QString::const_iterator& end, bool trailing)
+bool Message::parseParam(QString::const_iterator& it, const QString::const_iterator& end, bool trailing)
 {   // [rfc2812]
     // middle     =  nospcrlfcl *( ":" / nospcrlfcl )
     // trailing   =  *( ":" / " " / nospcrlfcl )
@@ -340,7 +343,7 @@ bool IrcMessage::parseParam(QString::const_iterator& it, const QString::const_it
     return true;
 }
 
-QString IrcMessage::render() const
+QString Message::render() const
 {
     QString out;
     if (!this->_tags.empty())
@@ -394,7 +397,7 @@ QString IrcMessage::render() const
     return out;
 }
 
-QString IrcMessage::escapeTagValue(const QString& value)
+QString Message::escapeTagValue(const QString& value)
 {
     QString escaped;
     for (QChar c : value)
@@ -408,4 +411,6 @@ QString IrcMessage::escapeTagValue(const QString& value)
     }
 
     return escaped;
+}
+
 }

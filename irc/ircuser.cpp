@@ -1,10 +1,15 @@
 #include "ircuser.h"
 #include "ircuserid.h"
 
-IrcUser::IrcUser(QString userid, QObject *parent) : QObject(parent)
+namespace Irc
 {
-    IrcUserId parsed (userid);
+
+User::User(QString userid, QObject *parent) : QObject(parent)
+{
+    UserId parsed (userid);
     this->_nickname = parsed.nickname;
     this->_username = parsed.username;
     this->_host = parsed.host;
+}
+
 }

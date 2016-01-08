@@ -7,7 +7,10 @@
 #include <QFont>
 #include <QString>
 
-DebugForm::DebugForm(IrcSession* session, QWidget *parent) :
+namespace Gui
+{
+
+DebugForm::DebugForm(Irc::Session* session, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::DebugForm),
     _session(session)
@@ -58,4 +61,6 @@ void DebugForm::on_inputLineEdit_returnPressed()
     auto edit = ui->inputLineEdit;
     this->_session->sendRaw(edit->text().append("\r\n").toUtf8());
     edit->clear();
+}
+
 }

@@ -4,11 +4,14 @@
 #include <QObject>
 #include <QString>
 
-class IrcUser : public QObject
+namespace Irc
+{
+
+class User : public QObject
 {
     Q_OBJECT
 public:
-    explicit IrcUser(QString userid, QObject *parent = 0);
+    explicit User(QString userid, QObject *parent = 0);
 
 signals:
 
@@ -17,5 +20,7 @@ public slots:
 private:
     QString _nickname, _username, _host;
 };
+
+}
 
 #endif // IRCUSER_H

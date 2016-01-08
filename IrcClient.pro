@@ -13,39 +13,39 @@ TEMPLATE = app
 CONFIG += c++11
 
 SOURCES += main.cpp\
-        ui/mainwindow.cpp \
+        gui/mainwindow.cpp \
     irc/ircsession.cpp \
     irc/ircmessage.cpp \
     irc/ircsupportinfo.cpp \
-    ui/debugform.cpp \
-    ui/servercfgdialog.cpp \
-    ui/sessionform.cpp \
-    ui/identitydialog.cpp \
+    gui/debugform.cpp \
+    gui/servercfgdialog.cpp \
+    gui/sessionform.cpp \
+    gui/identitydialog.cpp \
     irc/ircuserid.cpp \
     irc/ircchannel.cpp \
     irc/ircnicknamevalidator.cpp \
     irc/ircuser.cpp \
-    ui/ircchatbuffer.cpp
+    gui/ircchatbuffer.cpp
 
-HEADERS  += ui/mainwindow.h \
+HEADERS  += gui/mainwindow.h \
     irc/ircsession.h \
     irc/ircmessage.h \
     irc/ircsupportinfo.h \
-    ui/debugform.h \
-    ui/servercfgdialog.h \
-    ui/sessionform.h \
-    ui/identitydialog.h \
+    gui/debugform.h \
+    gui/servercfgdialog.h \
+    gui/sessionform.h \
+    gui/identitydialog.h \
     irc/ircuserid.h \
     irc/ircchannel.h \
     irc/ircnicknamevalidator.h \
     irc/ircuser.h \
-    ui/ircchatbuffer.h
+    gui/ircchatbuffer.h
 
-FORMS    += ui/mainwindow.ui \
-    ui/debugform.ui \
-    ui/servercfgdialog.ui \
-    ui/sessionform.ui \
-    ui/identitydialog.ui
+FORMS    += gui/mainwindow.ui \
+    gui/debugform.ui \
+    gui/servercfgdialog.ui \
+    gui/sessionform.ui \
+    gui/identitydialog.ui
 
 RESOURCES += \
     resources.qrc

@@ -4,10 +4,13 @@
 #include <QValidator>
 #include <QChar>
 
-class IrcNicknameValidator : public QValidator
+namespace Irc
+{
+
+class NicknameValidator : public QValidator
 {
 public:
-    IrcNicknameValidator(QObject* parent = nullptr, int nicklen = 0);
+    NicknameValidator(QObject* parent = nullptr, int nicklen = 0);
 
     virtual QValidator::State validate(QString& input, int& pos) const;
 
@@ -16,5 +19,7 @@ public:
 private:
     int _nicklen;
 };
+
+}
 
 #endif // IRCNICKNAMEVALIDATOR_H

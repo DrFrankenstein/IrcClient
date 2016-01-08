@@ -20,9 +20,12 @@ using std::bind;
 using namespace std::placeholders;
 using boost::find_if;
 
-QHash<QString, function<void(IrcSupportInfo*)> > IrcSupportInfo::defaults;
+namespace Irc
+{
 
-IrcSupportInfo::IrcSupportInfo()
+QHash<QString, function<void(SupportInfo*)> > SupportInfo::defaults;
+
+SupportInfo::SupportInfo()
 {
     this->setDefaults();
 
@@ -30,11 +33,11 @@ IrcSupportInfo::IrcSupportInfo()
         fn(this);
 }
 
-IrcSupportInfo::~IrcSupportInfo()
+SupportInfo::~SupportInfo()
 {
 }
 
-void IrcSupportInfo::parseToken(const QString& token)
+void SupportInfo::parseToken(const QString& token)
 {
     if (token.contains(' '))
         // final "are supported by this server" or equivalent.
@@ -50,52 +53,52 @@ void IrcSupportInfo::parseToken(const QString& token)
         this->setParam(name, value);
 }
 
-void IrcSupportInfo::setParam(const QString& name, const QString& value)
+void SupportInfo::setParam(const QString& name, const QString& value)
 {
-    typedef void (IrcSupportInfo::*Handler)(const QString&);
+    typedef void (SupportInfo::*Handler)(const QString&);
 
 #   pragma warning(disable: 640)    // "construction of local static object is not thread-safe"; this class is only used in one thread.
     static QHash<QString, Handler> map = {
-        { "CASEMAPPING", &IrcSupportInfo::setCasemappingParam },
-        { "CHANLIMIT",   &IrcSupportInfo::setChanlimitParam },
-        { "CHANMODES",   &IrcSupportInfo::setChanmodesParam },
-        { "CHANELLEN",   &IrcSupportInfo::setUnsignedParam<&IrcSupportInfo::channellen> },
-        { "CHANTYPES",   &IrcSupportInfo::setTokensParam<&IrcSupportInfo::chantypes> },
-        { "EXCEPTS",     &IrcSupportInfo::setCharParam<&IrcSupportInfo::excepts, 'e'> },
-        { "IDCHAN",      &IrcSupportInfo::setIdchanParam },
-        { "INVEX",       &IrcSupportInfo::setCharParam<&IrcSupportInfo::invex, 'I'> },
-        { "KICKLEN",     &IrcSupportInfo::setUnsignedParam<&IrcSupportInfo::kicklen> },
-        { "MAXLIST",     &IrcSupportInfo::setMaxlistParam },
-        { "MODES",       &IrcSupportInfo::setUnsignedParam<&IrcSupportInfo::modes> },
-        { "NETWORK",     &IrcSupportInfo::setStringParam<&IrcSupportInfo::network> },
-        { "NICKLEN",     &IrcSupportInfo::setUnsignedParam<&IrcSupportInfo::nicklen> },
-        { "PREFIX",      &IrcSupportInfo::setPrefixParam },
-        { "SAFELIST",    &IrcSupportInfo::setBoolParam<&IrcSupportInfo::safelist> },
-        { "STATUSMSG",   &IrcSupportInfo::setTokensParam<&IrcSupportInfo::statusmsg> },
-        { "STD",         &IrcSupportInfo::setStringParam<&IrcSupportInfo::std> },
-        { "TARGMAX",     &IrcSupportInfo::setTargmaxParam },
-        { "TOPICLEN",    &IrcSupportInfo::setUnsignedParam<&IrcSupportInfo::topiclen> },
-        { "MAXCHANNELS", &IrcSupportInfo::setMaxchannelsParam },
-        { "MAXBANS",     &IrcSupportInfo::setMaxbansParam },
-        { "WALLCHOPS",   &IrcSupportInfo::addToken<&IrcSupportInfo::statusmsg, '@'> },
-        { "WALLVOICES",  &IrcSupportInfo::addToken<&IrcSupportInfo::statusmsg, '+'> },
-        { "ELIST",       &IrcSupportInfo::setTokensParam<&IrcSupportInfo::elist> },
-        { "CHIDLEN",     &IrcSupportInfo::setChidlenParam },
-        { "SILENCE",     &IrcSupportInfo::setUnsignedParam<&IrcSupportInfo::silence> },
-        { "RFC2812",     &IrcSupportInfo::setBoolParam<&IrcSupportInfo::rfc2812> },
-        { "PENALTY",     &IrcSupportInfo::setBoolParam<&IrcSupportInfo::penalty> },
-        { "FNC",         &IrcSupportInfo::setBoolParam<&IrcSupportInfo::fnc> },
-        { "AWAYLEN",     &IrcSupportInfo::setUnsignedParam<&IrcSupportInfo::awaylen> },
-        //{"NOQUIT",      &IrcSupportInfo::setBoolParam<&IrcSupportInfo::noquit>},
-        { "USERIP",      &IrcSupportInfo::setBoolParam<&IrcSupportInfo::userip> },
-        { "CPRIVMSG",    &IrcSupportInfo::setBoolParam<&IrcSupportInfo::cprivmsg> },
-        { "CNOTICE",     &IrcSupportInfo::setBoolParam<&IrcSupportInfo::cnotice> },
-        { "MAXTARGETS",  &IrcSupportInfo::setUnsignedParam<&IrcSupportInfo::maxtargets> },
-        { "KNOCK",       &IrcSupportInfo::setBoolParam<&IrcSupportInfo::knock> },
-        { "VCHANS",      &IrcSupportInfo::setBoolParam<&IrcSupportInfo::vchans> },
-        { "WATCH",       &IrcSupportInfo::setUnsignedParam<&IrcSupportInfo::watch> },
-        { "WHOX",        &IrcSupportInfo::setBoolParam<&IrcSupportInfo::whox> },
-        { "CALLERID",    &IrcSupportInfo::setBoolParam<&IrcSupportInfo::callerid> }
+        { "CASEMAPPING", &SupportInfo::setCasemappingParam },
+        { "CHANLIMIT",   &SupportInfo::setChanlimitParam },
+        { "CHANMODES",   &SupportInfo::setChanmodesParam },
+        { "CHANELLEN",   &SupportInfo::setUnsignedParam<&SupportInfo::channellen> },
+        { "CHANTYPES",   &SupportInfo::setTokensParam<&SupportInfo::chantypes> },
+        { "EXCEPTS",     &SupportInfo::setCharParam<&SupportInfo::excepts, 'e'> },
+        { "IDCHAN",      &SupportInfo::setIdchanParam },
+        { "INVEX",       &SupportInfo::setCharParam<&SupportInfo::invex, 'I'> },
+        { "KICKLEN",     &SupportInfo::setUnsignedParam<&SupportInfo::kicklen> },
+        { "MAXLIST",     &SupportInfo::setMaxlistParam },
+        { "MODES",       &SupportInfo::setUnsignedParam<&SupportInfo::modes> },
+        { "NETWORK",     &SupportInfo::setStringParam<&SupportInfo::network> },
+        { "NICKLEN",     &SupportInfo::setUnsignedParam<&SupportInfo::nicklen> },
+        { "PREFIX",      &SupportInfo::setPrefixParam },
+        { "SAFELIST",    &SupportInfo::setBoolParam<&SupportInfo::safelist> },
+        { "STATUSMSG",   &SupportInfo::setTokensParam<&SupportInfo::statusmsg> },
+        { "STD",         &SupportInfo::setStringParam<&SupportInfo::std> },
+        { "TARGMAX",     &SupportInfo::setTargmaxParam },
+        { "TOPICLEN",    &SupportInfo::setUnsignedParam<&SupportInfo::topiclen> },
+        { "MAXCHANNELS", &SupportInfo::setMaxchannelsParam },
+        { "MAXBANS",     &SupportInfo::setMaxbansParam },
+        { "WALLCHOPS",   &SupportInfo::addToken<&SupportInfo::statusmsg, '@'> },
+        { "WALLVOICES",  &SupportInfo::addToken<&SupportInfo::statusmsg, '+'> },
+        { "ELIST",       &SupportInfo::setTokensParam<&SupportInfo::elist> },
+        { "CHIDLEN",     &SupportInfo::setChidlenParam },
+        { "SILENCE",     &SupportInfo::setUnsignedParam<&SupportInfo::silence> },
+        { "RFC2812",     &SupportInfo::setBoolParam<&SupportInfo::rfc2812> },
+        { "PENALTY",     &SupportInfo::setBoolParam<&SupportInfo::penalty> },
+        { "FNC",         &SupportInfo::setBoolParam<&SupportInfo::fnc> },
+        { "AWAYLEN",     &SupportInfo::setUnsignedParam<&SupportInfo::awaylen> },
+        //{"NOQUIT",      &SupportInfo::setBoolParam<&SupportInfo::noquit>},
+        { "USERIP",      &SupportInfo::setBoolParam<&SupportInfo::userip> },
+        { "CPRIVMSG",    &SupportInfo::setBoolParam<&SupportInfo::cprivmsg> },
+        { "CNOTICE",     &SupportInfo::setBoolParam<&SupportInfo::cnotice> },
+        { "MAXTARGETS",  &SupportInfo::setUnsignedParam<&SupportInfo::maxtargets> },
+        { "KNOCK",       &SupportInfo::setBoolParam<&SupportInfo::knock> },
+        { "VCHANS",      &SupportInfo::setBoolParam<&SupportInfo::vchans> },
+        { "WATCH",       &SupportInfo::setUnsignedParam<&SupportInfo::watch> },
+        { "WHOX",        &SupportInfo::setBoolParam<&SupportInfo::whox> },
+        { "CALLERID",    &SupportInfo::setBoolParam<&SupportInfo::callerid> }
     };
 
     Handler handler = map[name];
@@ -105,75 +108,75 @@ void IrcSupportInfo::setParam(const QString& name, const QString& value)
     tokens.insert(name, value);
 }
 
-void IrcSupportInfo::clearParam(const QString& name)
+void SupportInfo::clearParam(const QString& name)
 {
     setDefaults();
 
-    function<void(IrcSupportInfo*)> setter = defaults.value(name);
+    function<void(SupportInfo*)> setter = defaults.value(name);
     if (setter)
         setter(this);
 }
 
-void IrcSupportInfo::setDefaults()
+void SupportInfo::setDefaults()
 {
     if (!defaults.empty())
         return;
 
     // We could have used templates instead of bound functions like for the non-defaults, but this would
     // prevent us from using initializer-lists for collections, among other things.
-    this->setDefault("CASEMAPPING", &IrcSupportInfo::casemapping, Rfc1459);
-    this->setDefault("CHANLIMIT", &IrcSupportInfo::chanlimit);
-    defaults.insert("CHANMODES", bind(&IrcSupportInfo::clearChanmodes, _1));
-    this->setDefault("CHANELLEN", &IrcSupportInfo::channellen, 200U);
-    this->setDefault<QSet<QChar> >("CHANTYPES", &IrcSupportInfo::chantypes, { '#', '&' });
-    this->setDefault("EXCEPTS", &IrcSupportInfo::excepts);
-    this->setDefault("IDCHAN", &IrcSupportInfo::idchan);
-    this->setDefault("INVEX", &IrcSupportInfo::invex);
-    this->setDefault("KICKLEN", &IrcSupportInfo::kicklen);
-    this->setDefault("MAXLIST", &IrcSupportInfo::maxlist);
-    this->setDefault("MODES", &IrcSupportInfo::modes, 3U);
-    this->setDefault("NETWORK", &IrcSupportInfo::network);
-    this->setDefault("NICKLEN", &IrcSupportInfo::nicklen, 9U);
-    this->setDefault<QList<pair<QChar, QChar> > >("PREFIX", &IrcSupportInfo::prefix, { { 'o','@' },{ 'v','+' } });
-    this->setDefault("SAFELIST", &IrcSupportInfo::safelist);
-    this->setDefault("STATUSMSG", &IrcSupportInfo::statusmsg);
-    this->setDefault("STD", &IrcSupportInfo::std);
-    this->setDefault("TARGMAX", &IrcSupportInfo::targmax);
-    this->setDefault("TOPICLEN", &IrcSupportInfo::topiclen);
+    this->setDefault("CASEMAPPING", &SupportInfo::casemapping, Rfc1459);
+    this->setDefault("CHANLIMIT", &SupportInfo::chanlimit);
+    defaults.insert("CHANMODES", bind(&SupportInfo::clearChanmodes, _1));
+    this->setDefault("CHANELLEN", &SupportInfo::channellen, 200U);
+    this->setDefault<QSet<QChar> >("CHANTYPES", &SupportInfo::chantypes, { '#', '&' });
+    this->setDefault("EXCEPTS", &SupportInfo::excepts);
+    this->setDefault("IDCHAN", &SupportInfo::idchan);
+    this->setDefault("INVEX", &SupportInfo::invex);
+    this->setDefault("KICKLEN", &SupportInfo::kicklen);
+    this->setDefault("MAXLIST", &SupportInfo::maxlist);
+    this->setDefault("MODES", &SupportInfo::modes, 3U);
+    this->setDefault("NETWORK", &SupportInfo::network);
+    this->setDefault("NICKLEN", &SupportInfo::nicklen, 9U);
+    this->setDefault<QList<pair<QChar, QChar> > >("PREFIX", &SupportInfo::prefix, { { 'o','@' },{ 'v','+' } });
+    this->setDefault("SAFELIST", &SupportInfo::safelist);
+    this->setDefault("STATUSMSG", &SupportInfo::statusmsg);
+    this->setDefault("STD", &SupportInfo::std);
+    this->setDefault("TARGMAX", &SupportInfo::targmax);
+    this->setDefault("TOPICLEN", &SupportInfo::topiclen);
 
-    defaults.insert("WALLCHOPS", bind(&IrcSupportInfo::removeToken, _1, &IrcSupportInfo::statusmsg, '@'));
-    defaults.insert("WALLVOICES", bind(&IrcSupportInfo::removeToken, _1, &IrcSupportInfo::statusmsg, '+'));
-    this->setDefault("ELIST", &IrcSupportInfo::elist);
-    defaults.insert("CHIDLEN", bind(&IrcSupportInfo::clearChidlen, _1));
-    this->setDefault("SILENCE", &IrcSupportInfo::silence);
-    this->setDefault("RFC2812", &IrcSupportInfo::rfc2812);
-    this->setDefault("PENALTY", &IrcSupportInfo::penalty);
-    this->setDefault("FNC", &IrcSupportInfo::fnc);
-    this->setDefault("AWAYLEN", &IrcSupportInfo::awaylen);
-    this->setDefault("USERIP", &IrcSupportInfo::userip);
-    this->setDefault("CPRIVMSG", &IrcSupportInfo::cprivmsg);
-    this->setDefault("CNOTICE", &IrcSupportInfo::cnotice);
-    this->setDefault("MAXTARGETS", &IrcSupportInfo::maxtargets, 1U);
-    this->setDefault("KNOCK", &IrcSupportInfo::knock);
-    this->setDefault("VCHANS", &IrcSupportInfo::vchans);
-    this->setDefault("WATCH", &IrcSupportInfo::watch);
-    this->setDefault("WHOX", &IrcSupportInfo::whox);
-    this->setDefault("CALLERID", &IrcSupportInfo::callerid);
+    defaults.insert("WALLCHOPS", bind(&SupportInfo::removeToken, _1, &SupportInfo::statusmsg, '@'));
+    defaults.insert("WALLVOICES", bind(&SupportInfo::removeToken, _1, &SupportInfo::statusmsg, '+'));
+    this->setDefault("ELIST", &SupportInfo::elist);
+    defaults.insert("CHIDLEN", bind(&SupportInfo::clearChidlen, _1));
+    this->setDefault("SILENCE", &SupportInfo::silence);
+    this->setDefault("RFC2812", &SupportInfo::rfc2812);
+    this->setDefault("PENALTY", &SupportInfo::penalty);
+    this->setDefault("FNC", &SupportInfo::fnc);
+    this->setDefault("AWAYLEN", &SupportInfo::awaylen);
+    this->setDefault("USERIP", &SupportInfo::userip);
+    this->setDefault("CPRIVMSG", &SupportInfo::cprivmsg);
+    this->setDefault("CNOTICE", &SupportInfo::cnotice);
+    this->setDefault("MAXTARGETS", &SupportInfo::maxtargets, 1U);
+    this->setDefault("KNOCK", &SupportInfo::knock);
+    this->setDefault("VCHANS", &SupportInfo::vchans);
+    this->setDefault("WATCH", &SupportInfo::watch);
+    this->setDefault("WHOX", &SupportInfo::whox);
+    this->setDefault("CALLERID", &SupportInfo::callerid);
 }
 
 template <typename ParamType>
-void IrcSupportInfo::setDefault(const QString& name, ParamType IrcSupportInfo::* param, const ParamType& dflt)
+void SupportInfo::setDefault(const QString& name, ParamType SupportInfo::* param, const ParamType& dflt)
 {
-    defaults.insert(name, bind(&IrcSupportInfo::doClearParam<ParamType>, _1, param, dflt));
+    defaults.insert(name, bind(&SupportInfo::doClearParam<ParamType>, _1, param, dflt));
 }
 
 template <typename ParamType>
-void IrcSupportInfo::doClearParam(ParamType IrcSupportInfo::* param, const ParamType& dflt)
+void SupportInfo::doClearParam(ParamType SupportInfo::* param, const ParamType& dflt)
 {
     this->*param = dflt;
 }
 
-void IrcSupportInfo::clearChanmodes()
+void SupportInfo::clearChanmodes()
 {
     this->chanmodesA.clear();
     this->chanmodesB.clear();
@@ -181,25 +184,25 @@ void IrcSupportInfo::clearChanmodes()
     this->chanmodesD.clear();
 }
 
-void IrcSupportInfo::removeToken(QSet<QChar> IrcSupportInfo::* var, QChar c)
+void SupportInfo::removeToken(QSet<QChar> SupportInfo::* var, QChar c)
 {
     (this->*var).remove(c);
 }
 
-void IrcSupportInfo::clearChidlen()
+void SupportInfo::clearChidlen()
 {
     this->idchan.remove('!');
 }
 
-template <bool IrcSupportInfo::* var>
-void IrcSupportInfo::setBoolParam(const QString& unused)
+template <bool SupportInfo::* var>
+void SupportInfo::setBoolParam(const QString& unused)
 {
     this->*var = true;
     Q_UNUSED(unused);
 }
 
-template <QChar IrcSupportInfo::* var, char dflt>
-void IrcSupportInfo::setCharParam(const QString& value)
+template <QChar SupportInfo::* var, char dflt>
+void SupportInfo::setCharParam(const QString& value)
 {
     if (value.isEmpty())
         this->*var = dflt;
@@ -207,39 +210,39 @@ void IrcSupportInfo::setCharParam(const QString& value)
         this->*var = value.at(0);
 }
 
-template <uint IrcSupportInfo::* var>
-void IrcSupportInfo::setUnsignedParam(const QString& value)
+template <uint SupportInfo::* var>
+void SupportInfo::setUnsignedParam(const QString& value)
 {
     this->*var = value.toUInt();
 }
 
-template <QString IrcSupportInfo::* var>
-void IrcSupportInfo::setStringParam(const QString& value)
+template <QString SupportInfo::* var>
+void SupportInfo::setStringParam(const QString& value)
 {
     this->*var = value;
 }
 
-void IrcSupportInfo::setTokensParam(QSet<QChar> IrcSupportInfo::* param, const QString& value)
+void SupportInfo::setTokensParam(QSet<QChar> SupportInfo::* param, const QString& value)
 {
     (this->*param).clear();
     for (QChar c : value)
         (this->*param).insert(c);
 }
 
-template <QSet<QChar> IrcSupportInfo::* var>
-void IrcSupportInfo::setTokensParam(const QString& value)
+template <QSet<QChar> SupportInfo::* var>
+void SupportInfo::setTokensParam(const QString& value)
 {
     this->setTokensParam(var, value);
 }
 
-template <QSet<QChar> IrcSupportInfo::* var, char c>
-void IrcSupportInfo::addToken(const QString& unused)
+template <QSet<QChar> SupportInfo::* var, char c>
+void SupportInfo::addToken(const QString& unused)
 {
     (this->*var).insert(c);
     Q_UNUSED(unused);
 }
 
-void IrcSupportInfo::setPrefixParam(const QString& value)
+void SupportInfo::setPrefixParam(const QString& value)
 {
     if (value.isEmpty() || value[0] != '(') return;
 
@@ -256,15 +259,15 @@ void IrcSupportInfo::setPrefixParam(const QString& value)
     }
 }
 
-void IrcSupportInfo::setChanmodesParam(const QString& value)
+void SupportInfo::setChanmodesParam(const QString& value)
 {
     QStringList parts = value.split(',');
     auto item = parts.cbegin(), end = parts.cend();
-    QSet<QChar> IrcSupportInfo::* sets[] = {
-        &IrcSupportInfo::chanmodesA, 
-        &IrcSupportInfo::chanmodesB, 
-        &IrcSupportInfo::chanmodesC, 
-        &IrcSupportInfo::chanmodesD 
+    QSet<QChar> SupportInfo::* sets[] = {
+        &SupportInfo::chanmodesA, 
+        &SupportInfo::chanmodesB, 
+        &SupportInfo::chanmodesC, 
+        &SupportInfo::chanmodesD 
     };
 
     for (auto var : sets)
@@ -274,7 +277,7 @@ void IrcSupportInfo::setChanmodesParam(const QString& value)
     }
 }
 
-void IrcSupportInfo::setChanlimitParam(const QString& value)
+void SupportInfo::setChanlimitParam(const QString& value)
 {
     this->chanlimit.clear();
 
@@ -285,7 +288,7 @@ void IrcSupportInfo::setChanlimitParam(const QString& value)
             chanlimit.insert(symbol, item.second);
 }
 
-void IrcSupportInfo::setMaxchannelsParam(const QString& value)
+void SupportInfo::setMaxchannelsParam(const QString& value)
 {
     this->chanlimit.clear();
 
@@ -297,12 +300,12 @@ void IrcSupportInfo::setMaxchannelsParam(const QString& value)
         this->chanlimit.insert(prefix, limit);
 }
 
-void IrcSupportInfo::setMaxlistParam(const QString& value)
+void SupportInfo::setMaxlistParam(const QString& value)
 {
     this->maxlist = parsePairList(value);
 }
 
-void IrcSupportInfo::setMaxbansParam(const QString& value)
+void SupportInfo::setMaxbansParam(const QString& value)
 {   // this isn't meant to be efficient, as MAXBANS is deprecated anyway.
     bool ok;
     int limit = value.toInt(&ok);
@@ -333,7 +336,7 @@ void IrcSupportInfo::setMaxbansParam(const QString& value)
     this->maxlist.append(make_pair(QString("b"), limit));
 }
 
-void IrcSupportInfo::setIdchanParam(const QString& value)
+void SupportInfo::setIdchanParam(const QString& value)
 {
     auto list = parsePairList(value);
 
@@ -342,19 +345,19 @@ void IrcSupportInfo::setIdchanParam(const QString& value)
             this->idchan.insert(symbol, item.second);
 }
 
-void IrcSupportInfo::setChidlenParam(const QString& value)
+void SupportInfo::setChidlenParam(const QString& value)
 {
     this->idchan['!'] = value.toUInt();
 }
 
-void IrcSupportInfo::setTargmaxParam(const QString& value)
+void SupportInfo::setTargmaxParam(const QString& value)
 {
     auto list = parsePairList(value);
     for (auto item : list)
         this->targmax.insert(item.first, item.second);
 }
 
-QList<pair<QString, int> > IrcSupportInfo::parsePairList(const QString& value)
+QList<pair<QString, int> > SupportInfo::parsePairList(const QString& value)
 {
     QList<pair<QString, int> > parsed;
 
@@ -381,7 +384,7 @@ QList<pair<QString, int> > IrcSupportInfo::parsePairList(const QString& value)
     return parsed;
 }
 
-void IrcSupportInfo::setCasemappingParam(const QString& value)
+void SupportInfo::setCasemappingParam(const QString& value)
 {
     if (value == "ascii")
         casemapping = Ascii;
@@ -391,7 +394,7 @@ void IrcSupportInfo::setCasemappingParam(const QString& value)
         casemapping = Rfc1459;
 }
 
-QString IrcSupportInfo::unescapeValue(const QStringRef& range)
+QString SupportInfo::unescapeValue(const QStringRef& range)
 {
     QString unescaped;
     for (auto it = range.begin(), end = range.end(); it != end; qt_noop())
@@ -407,7 +410,7 @@ QString IrcSupportInfo::unescapeValue(const QStringRef& range)
     return unescaped;
 }
 
-QChar IrcSupportInfo::unescapeChar(QString::const_iterator& it, const QString::const_iterator& end)
+QChar SupportInfo::unescapeChar(QString::const_iterator& it, const QString::const_iterator& end)
 {
     QString::const_iterator escape = ++it;
     if (escape == end || *escape++ != 'x') return '\\';
@@ -422,4 +425,6 @@ QChar IrcSupportInfo::unescapeChar(QString::const_iterator& it, const QString::c
         it = escape + 2;
         return QChar(ucs);
     }
+}
+
 }

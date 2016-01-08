@@ -1,6 +1,9 @@
 #include "servercfgdialog.h"
 #include "ui_servercfgdialog.h"
 
+namespace Gui
+{
+
 ServerCfgDialog::ServerCfgDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ServerCfgDialog)
@@ -36,4 +39,6 @@ bool ServerCfgDialog::invisible() const
 bool ServerCfgDialog::wallops() const
 {
     return ui->wallopsCheckBox->isChecked();
+}
+
 }

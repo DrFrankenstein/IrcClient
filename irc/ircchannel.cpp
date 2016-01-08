@@ -3,9 +3,14 @@
 
 #include "ircchannel.h"
 
-IrcChannel::IrcChannel(const QString& name, QObject *parent) 
+namespace Irc
+{
+
+Channel::Channel(const QString& name, QObject *parent) 
     : QObject(parent), _name(name)
 {
     this->setObjectName(name);
+}
+
 }
 

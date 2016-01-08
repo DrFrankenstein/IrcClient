@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>IdentityDialog</class>
- <widget class="QDialog" name="IdentityDialog">
+ <class>Gui::IdentityDialog</class>
+ <widget class="QDialog" name="Gui::IdentityDialog">
   <property name="geometry">
    <rect>
     <x>0</x>

@@ -8,6 +8,9 @@
 class QBrush;
 class QString;
 
+namespace Gui
+{
+
 namespace Ui {
 class DebugForm;
 }
@@ -17,7 +20,7 @@ class DebugForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit DebugForm(IrcSession* session, QWidget *parent = 0);
+    explicit DebugForm(Irc::Session* session, QWidget *parent = 0);
     ~DebugForm();
 
 private slots:
@@ -29,9 +32,11 @@ private slots:
 private:
     Ui::DebugForm *ui;
 
-    IrcSession* _session;
+    Irc::Session* _session;
 
     void addLine(const QBrush& prefixBrush, const QString& prefix, const QString& text);
 };
+
+}
 
 #endif // DEBUGFORM_H

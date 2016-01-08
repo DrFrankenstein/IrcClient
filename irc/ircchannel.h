@@ -4,11 +4,14 @@
 #include <QObject>
 #include <QString>
 
-class IrcChannel : public QObject
+namespace Irc
+{
+
+class Channel : public QObject
 {
     Q_OBJECT
 public:
-    explicit IrcChannel(const QString& name, QObject *parent = nullptr);
+    explicit Channel(const QString& name, QObject *parent = nullptr);
 
 signals:
 
@@ -17,5 +20,7 @@ public slots:
 private:
     QString _name, _topic;
 };
+
+}
 
 #endif // IRCCHANNEL_H

@@ -18,7 +18,10 @@
 
 class QByteArray;
 
-class IrcSession : public QObject
+namespace Irc
+{
+
+class Session : public QObject
 {
     Q_OBJECT
 public:
@@ -30,13 +33,13 @@ public:
         Online,
     };
 
-    explicit IrcSession(const QString& address, quint16 port,
+    explicit Session(const QString& address, quint16 port,
                         const QString& username, const QStringList& nicknames, const QString& realname,
                         const QString& password = QString(), bool invisible = true, bool wallops = false,
                         QObject* parent = nullptr);
-    ~IrcSession();
+    ~Session();
 
-    const IrcSupportInfo& support() const;
+    const SupportInfo& support() const;
 
     void open();
     void close();
@@ -59,7 +62,7 @@ public:
     void partAll();
 
 signals:
-    void stateChanged(IrcSession::State state);
+    void stateChanged(Session::State state);
 
     void rawLineReceived(QString line);
     void rawLineSent(QString line);
@@ -67,16 +70,16 @@ signals:
     void quitReceived(QString user, QString message);
 
     void joinReceived(QString user, QString channel);
-    void joinReceived(QWeakPointer<IrcUser> user, QString channel);
+    void joinReceived(QWeakPointer<User> user, QString channel);
     void partReceived(QString user, QString channel, QString message);
-    void partReceived(QWeakPointer<IrcUser> user, QString message);
+    void partReceived(QWeakPointer<User> user, QString message);
 
 public slots:
-    void sendMessage(const IrcMessage& msg);
+    void sendMessage(const Message& msg);
     void sendMessage(const QString& command, const std::initializer_list<QString> params,
                      const QMap<QString, QString>& tags = QMap<QString, QString>(),
                      const QString& prefix = QString());
-    void sendMessage(IrcMessage::ReplyCode replyCode, const std::initializer_list<QString> params,
+    void sendMessage(Message::ReplyCode replyCode, const std::initializer_list<QString> params,
                      const QMap<QString, QString>& tags = QMap<QString, QString>(),
                      const QString& prefix = QString());
     void sendRaw(const QByteArray& raw);
@@ -101,25 +104,27 @@ private:
     State _state;
 
     QTcpSocket _socket;
-    IrcSupportInfo _support;
+    SupportInfo _support;
 
-    QHash<QString, QSharedPointer<IrcChannel> > _channels;
-    QHash<QString, QSharedPointer<IrcUser> > _users;
+    QHash<QString, QSharedPointer<Channel> > _channels;
+    QHash<QString, QSharedPointer<User> > _users;
 
     void changeState(State state);
 
-    void handleMessage(const IrcMessage& msg);
-    void handleNick(const IrcMessage& msg);
-    void handlePing(const IrcMessage& msg);
-    void handleJoin(const IrcMessage& msg);
+    void handleMessage(const Message& msg);
+    void handleNick(const Message& msg);
+    void handlePing(const Message& msg);
+    void handleJoin(const Message& msg);
 
-    void handleRplWelcome(const IrcMessage& msg);
-    void handleRplISupport(const IrcMessage& msg);
+    void handleRplWelcome(const Message& msg);
+    void handleRplISupport(const Message& msg);
 
     void registerUser();
     void pong(const QString& server);
 
-    QSharedPointer<IrcUser> getUser(const QString& id);
+    QSharedPointer<User> getUser(const QString& id);
 };
+
+}
 
 #endif // IRCSESSION_H

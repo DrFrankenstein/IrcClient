@@ -5,6 +5,9 @@
 
 #include "../irc/ircsession.h"
 
+namespace Gui
+{
+
 namespace Ui {
     class SessionForm;
 }
@@ -14,16 +17,18 @@ class SessionForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit SessionForm(IrcSession* session, QWidget* parent = nullptr);
+    explicit SessionForm(Irc::Session* session, QWidget* parent = nullptr);
     ~SessionForm();
 
 private slots:
-    void sessionStateChanged(IrcSession::State state);
+    void sessionStateChanged(Irc::Session::State state);
 
 private:
     Ui::SessionForm* ui;
 
-    IrcSession* _session;
+    Irc::Session* _session;
 };
+
+}
 
 #endif // SERVERFORM_H

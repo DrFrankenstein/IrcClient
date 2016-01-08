@@ -7,7 +7,10 @@
 #include <QMap>
 #include <initializer_list>
 
-class IrcMessage
+namespace Irc
+{
+
+class Message
 {
 public:
     // Numeric reply codes (RFC 2812 Section 5.)
@@ -234,20 +237,20 @@ public:
     };
 
     //IrcMessage();
-    IrcMessage(const QByteArray& raw);
-    IrcMessage(const QString& command, const QStringList& params = QStringList(),
+    Message(const QByteArray& raw);
+    Message(const QString& command, const QStringList& params = QStringList(),
                const QMap<QString, QString>& tags = QMap<QString, QString>(),
                const QString& prefix = QString());
-    IrcMessage(ReplyCode replyCode, const QStringList& params = QStringList(),
+    Message(ReplyCode replyCode, const QStringList& params = QStringList(),
                const QMap<QString, QString>& tags = QMap<QString, QString>(),
                const QString& prefix = QString());
-    IrcMessage(const QString& command, const std::initializer_list<QString> params,
+    Message(const QString& command, const std::initializer_list<QString> params,
                const QMap<QString, QString>& tags = QMap<QString, QString>(),
                const QString& prefix = QString());
-    IrcMessage(ReplyCode replyCode, const std::initializer_list<QString> params,
+    Message(ReplyCode replyCode, const std::initializer_list<QString> params,
                const QMap<QString, QString>& tags = QMap<QString, QString>(),
                const QString& prefix = QString());
-    ~IrcMessage();
+    ~Message();
 
     bool isValid() const;
     const QMap<QString, QString>& tags() const;
@@ -282,5 +285,7 @@ private:
 
     static QString escapeTagValue(const QString& value);
 };
+
+}
 
 #endif // IRCMESSAGE_H

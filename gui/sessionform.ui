@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SessionForm</class>
- <widget class="QWidget" name="SessionForm">
+ <class>Gui::SessionForm</class>
+ <widget class="QWidget" name="Gui::SessionForm">
   <property name="geometry">
    <rect>
     <x>0</x>

@@ -3,16 +3,19 @@
 
 #include <QString>
 
-struct IrcUserId
+namespace Irc
+{
+
+struct UserId
 {
     QString nickname;
     QString username;
     QString host;
 
 public:
-    IrcUserId();
-    IrcUserId(const QString& raw);
-    ~IrcUserId();
+    UserId();
+    UserId(const QString& raw);
+    ~UserId();
 
     QString render() const;
 
@@ -26,5 +29,7 @@ private:
 
     static bool isNickChar(QChar ch, bool allowDigits);
 };
+
+}
 
 #endif // IRCUSERID_H

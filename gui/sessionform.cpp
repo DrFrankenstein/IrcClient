@@ -3,7 +3,10 @@
 
 #include <QString>
 
-SessionForm::SessionForm(IrcSession* session, QWidget* parent) :
+namespace Gui
+{
+
+SessionForm::SessionForm(Irc::Session* session, QWidget* parent) :
     QWidget(parent),
     ui(new Ui::SessionForm),
     _session(session)
@@ -11,8 +14,8 @@ SessionForm::SessionForm(IrcSession* session, QWidget* parent) :
     ui->setupUi(this);
     session->setParent(this);
 
-    QObject::connect(this->_session, SIGNAL(stateChanged(IrcSession::State)),
-                     this, SLOT(sessionStateChanged(IrcSession::State)));
+    QObject::connect(this->_session, SIGNAL(stateChanged(Session::State)),
+                     this, SLOT(sessionStateChanged(Session::State)));
 }
 
 SessionForm::~SessionForm()
@@ -20,25 +23,27 @@ SessionForm::~SessionForm()
     delete ui;
 }
 
-void SessionForm::sessionStateChanged(IrcSession::State state)
+void SessionForm::sessionStateChanged(Irc::Session::State state)
 {
     QString text;
 
     switch (state)
     {
-    case IrcSession::Offline:
+    case Irc::Session::Offline:
         text = tr("(Offline)");
         break;
-    case IrcSession::Connecting:
+    case Irc::Session::Connecting:
         text = tr("Connecting...");
         break;
-    case IrcSession::Registering:
+    case Irc::Session::Registering:
         text = tr("Registering connection...");
         break;
-    case IrcSession::Online:
+    case Irc::Session::Online:
         text = tr("Connected");
         break;
     }
 
     ui->networkNameLabel->setText(text);
+}
+
 }
