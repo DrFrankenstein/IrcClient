@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "ircsession.h"
+#include "../irc/ircsession.h"
 
 class QBrush;
 class QString;

@@ -1,7 +1,7 @@
 #include "identitydialog.h"
 #include "ui_identitydialog.h"
 
-#include "ircnicknamevalidator.h"
+#include "../irc/ircnicknamevalidator.h"
 
 #include <QStringList>
 #include <QSettings>
