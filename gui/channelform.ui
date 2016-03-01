@@ -52,7 +52,7 @@
   <customwidget>
    <class>Gui::IrcChatBuffer</class>
    <extends>QTextEdit</extends>
-   <header>ircchatbuffer.h</header>
+   <header>gui/ircchatbuffer.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
