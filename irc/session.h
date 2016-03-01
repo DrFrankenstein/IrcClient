@@ -78,7 +78,7 @@ signals:
     void joinReceived(QString user, QString channel);
     void joinReceived(QWeakPointer<User> user, QString channel);
     void partReceived(QString user, QString channel, QString message);
-    void partReceived(QWeakPointer<User> user, QString message);
+    void partReceived(QWeakPointer<User> user, QString channel, QString message);
 
     void nickReceived(QString user, QString newnick);
     void nickReceived(QWeakPointer<User> user, QString newnick);

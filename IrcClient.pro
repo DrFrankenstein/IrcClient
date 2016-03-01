@@ -55,7 +55,7 @@ RESOURCES += \
 
 win32-msvc*:{
     # Uncomment this if you want static analysis warnings. Much slower, but useful when adding new code.
-    QMAKE_CXXFLAGS += -analyze
+    # QMAKE_CXXFLAGS += -analyze
 
     # I usually compile with a custom makespec with -W4 (instead of the default -W3),
     # but I need certain noisy warnings disabled.

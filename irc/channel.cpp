@@ -48,5 +48,27 @@ void Channel::handleMessage(QWeakPointer<User> source, QString target, QString m
     emit messageReceived(source, message);
 }
 
+void Channel::handleJoin(QWeakPointer<User> user, QString channel)
+{
+    if (channel != this->_name)
+        return;
+
+    emit joinReceived(user);
+}
+
+void Channel::handlePart(QWeakPointer<User> user, QString channel, QString message)
+{
+    if (channel != this->_name)
+        return;
+
+    emit partReceived(user, message);
+}
+
+void Channel::handleQuit(QString user, QString channel, QString message)
+{
+    if (channel != this->_name)
+        return;
+}
+
 }
 
