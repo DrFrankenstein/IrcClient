@@ -61,18 +61,27 @@ public:
     void part(const QStringList& channels, const QString& message = QString());
     void partAll();
 
+    void privMsg(const QString& target, const QString& message);
+
 signals:
     void stateChanged(Session::State state);
 
     void rawLineReceived(QString line);
     void rawLineSent(QString line);
 
+    void privMsgReceived(QString source, QString target, QString message);
+    void privMsgReceived(QWeakPointer<User> source, QString target, QString message);
+
     void quitReceived(QString user, QString message);
+    void quitReceived(QWeakPointer<User> user, QString message);
 
     void joinReceived(QString user, QString channel);
     void joinReceived(QWeakPointer<User> user, QString channel);
     void partReceived(QString user, QString channel, QString message);
     void partReceived(QWeakPointer<User> user, QString message);
+
+    void nickReceived(QString user, QString newnick);
+    void nickReceived(QWeakPointer<User> user, QString newnick);
 
 public slots:
     void sendMessage(const Message& msg);
@@ -113,8 +122,10 @@ private:
 
     void handleMessage(const Message& msg);
     void handleNick(const Message& msg);
+    void handleQuit(const Message& msg);
     void handlePing(const Message& msg);
     void handleJoin(const Message& msg);
+    void handlePrivMsg(const Message& msg);
 
     void handleRplWelcome(const Message& msg);
     void handleRplISupport(const Message& msg);
@@ -123,6 +134,7 @@ private:
     void pong(const QString& server);
 
     QSharedPointer<User> getUser(const QString& id);
+    void removeUser(const QString& id);
 };
 
 }

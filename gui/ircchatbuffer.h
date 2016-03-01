@@ -12,7 +12,7 @@ class IrcChatBuffer : public QTextEdit
     Q_OBJECT
 
 public:
-    IrcChatBuffer();
+    IrcChatBuffer(QWidget* parent = 0);
 };
 
 }

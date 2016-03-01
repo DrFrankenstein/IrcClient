@@ -92,7 +92,7 @@ void Session::quit(const QString& message)
         this->sendMessage("QUIT", {message});
 }
 
-void Session::join(const QString & channel, const QString & key)
+void Session::join(const QString& channel, const QString& key)
 {   // [rfc2812 3.2.1]
     if (key.isEmpty())
         this->sendMessage("JOIN", { channel });
@@ -100,12 +100,12 @@ void Session::join(const QString & channel, const QString & key)
         this->sendMessage("JOIN", { channel, key });
 }
 
-void Session::join(const QStringList & channels, const QStringList & keys)
+void Session::join(const QStringList& channels, const QStringList& keys)
 {   // [rfc2812 3.2.1]
     this->join(channels.join(','), keys.join(','));
 }
 
-void Session::part(const QString & channel, const QString & message)
+void Session::part(const QString& channel, const QString& message)
 {   // [rfc2812 3.2.2]
     if (message.isEmpty())
         this->sendMessage("PART", { channel });
@@ -113,7 +113,7 @@ void Session::part(const QString & channel, const QString & message)
         this->sendMessage("PART", { channel, message });
 }
 
-void Session::part(const QStringList & channels, const QString & message)
+void Session::part(const QStringList& channels, const QString& message)
 {   // [rfc2812 3.2.2]
     this->part(channels.join(','), message);
 }
@@ -121,6 +121,11 @@ void Session::part(const QStringList & channels, const QString & message)
 void Session::partAll()
 {   // [rfc2812 3.2.1]
     this->join("0");
+}
+
+void Session::privMsg(const QString& target, const QString& message)
+{   // [rfc2812 3.3.1]
+    this->sendMessage("PRIVMSG", { target, message });
 }
 
 void Session::sendMessage(const Message& msg)
@@ -204,6 +209,19 @@ void Session::handleNick(const Message& msg)
         this->_currentNickname = msg.params().at(0);
 }
 
+void Session::handleQuit(const Message& msg)
+{
+    // [rfc2812 3.1.7]
+    QString user = msg.prefix(),
+        reason = msg.params().size() > 0 ? 
+            msg.params()[0] : 
+            QString();
+    emit quitReceived(user, reason);
+    emit quitReceived(this->getUser(user), reason);
+
+    this->removeUser(msg.prefix());
+}
+
 void Session::handlePing(const Message& msg)
 {   // [rfc2812 3.7.2, 3.7.3]
     this->sendMessage("PONG", {msg.params().at(0)});
@@ -226,6 +244,21 @@ void Session::handleJoin(const Message& msg)
     emit joinReceived(userid, channelname);
     QSharedPointer<User> user = this->getUser(userid);
     emit joinReceived(user, channelname);
+}
+
+void Session::handlePrivMsg(const Message & msg)
+{   // [rfc2812 3.3.1]
+    const QString source = msg.prefix();
+    if (msg.params().size() < 2)
+        return;
+    
+    auto& params = msg.params();
+    const QString& target = params[0],
+                 &text = params[1];
+
+    emit privMsgReceived(source, target, text);
+    QSharedPointer<User> user = this->getUser(source);
+    emit privMsgReceived(user, target, text);
 }
 
 void Session::handleRplWelcome(const Message& msg)
@@ -265,6 +298,11 @@ QSharedPointer<User> Session::getUser(const QString& id)
     if (!user) user.reset(new User(id, this));
 
     return user;
+}
+
+void Session::removeUser(const QString& id)
+{
+    this->_users.remove(UserId(id).nickname);
 }
 
 }

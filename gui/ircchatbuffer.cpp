@@ -3,7 +3,8 @@
 namespace Gui
 {
 
-IrcChatBuffer::IrcChatBuffer()
+IrcChatBuffer::IrcChatBuffer(QWidget* parent)
+    : QTextEdit(parent)
 {
 
 }
