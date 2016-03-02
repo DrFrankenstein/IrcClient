@@ -74,7 +74,7 @@
            <string>+</string>
           </property>
           <property name="icon">
-           <iconset theme="list-add" resource="resources.qrc">
+           <iconset theme="list-add" resource="../resources.qrc">
             <normaloff>:/icons/resources/icons/list-add.png</normaloff>:/icons/resources/icons/list-add.png</iconset>
           </property>
          </widget>
@@ -85,7 +85,7 @@
            <string>-</string>
           </property>
           <property name="icon">
-           <iconset theme="list-remove" resource="resources.qrc">
+           <iconset theme="list-remove" resource="../resources.qrc">
             <normaloff>:/icons/resources/icons/list-remove.png</normaloff>:/icons/resources/icons/list-remove.png</iconset>
           </property>
          </widget>
@@ -96,7 +96,7 @@
            <string>▲</string>
           </property>
           <property name="icon">
-           <iconset theme="go-up" resource="resources.qrc">
+           <iconset theme="go-up" resource="../resources.qrc">
             <normaloff>:/icons/resources/icons/go-up.png</normaloff>:/icons/resources/icons/go-up.png</iconset>
           </property>
          </widget>
@@ -107,7 +107,7 @@
            <string>▼</string>
           </property>
           <property name="icon">
-           <iconset theme="go-down" resource="resources.qrc">
+           <iconset theme="go-down" resource="../resources.qrc">
             <normaloff>:/icons/resources/icons/go-down.png</normaloff>:/icons/resources/icons/go-down.png</iconset>
           </property>
          </widget>
@@ -138,38 +138,38 @@
   <tabstop>downToolButton</tabstop>
  </tabstops>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>IdentityDialog</receiver>
+   <receiver>Gui::IdentityDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>196</x>
+     <y>299</y>
     </hint>
     <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
+     <x>196</x>
+     <y>159</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>IdentityDialog</receiver>
+   <receiver>Gui::IdentityDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>196</x>
+     <y>299</y>
     </hint>
     <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
+     <x>196</x>
+     <y>159</y>
     </hint>
    </hints>
   </connection>
