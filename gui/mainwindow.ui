@@ -101,7 +101,7 @@
   <connection>
    <sender>action_Quit</sender>
    <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
+   <receiver>Gui::MainWindow</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
