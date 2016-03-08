@@ -2,7 +2,7 @@
 
 #include "message.h"
 #include "supportinfo.h"
-#include "userid.h"
+#include "hostmask.h"
 #include "channel.h"
 
 #include <QObject>
@@ -68,8 +68,8 @@ void Session::changeNickname(const QString& nick)
 
 bool Session::isMe(const QString &id)
 {
-    if (UserId::isFullyQualified(id))
-        return UserId(id).nickname == this->_currentNickname;
+    if (Hostmask::isFullyQualified(id))
+        return Hostmask(id).nickname == this->_currentNickname;
     else
         return id == this->_currentNickname;
 }
@@ -293,7 +293,7 @@ void Session::registerUser()
 
 QSharedPointer<User> Session::getUser(const QString& id)
 {
-    QString nick = UserId(id).nickname;
+    QString nick = Hostmask(id).nickname;
     QSharedPointer<User> user = this->_users[nick];
     if (!user) user.reset(new User(id, this));
 
@@ -302,7 +302,7 @@ QSharedPointer<User> Session::getUser(const QString& id)
 
 void Session::removeUser(const QString& id)
 {
-    this->_users.remove(UserId(id).nickname);
+    this->_users.remove(Hostmask(id).nickname);
 }
 
 }

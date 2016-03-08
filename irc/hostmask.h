@@ -6,16 +6,16 @@
 namespace Irc
 {
 
-struct UserId
+struct Hostmask
 {
     QString nickname;
     QString username;
     QString host;
 
 public:
-    UserId();
-    UserId(const QString& raw);
-    ~UserId();
+    Hostmask();
+    Hostmask(const QString& raw);
+    ~Hostmask();
 
     QString render() const;
 

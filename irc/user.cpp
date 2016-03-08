@@ -1,12 +1,13 @@
 #include "user.h"
-#include "userid.h"
+#include "hostmask.h"
 
 namespace Irc
 {
 
 User::User(QString userid, QObject *parent) : QObject(parent)
 {
-    UserId parsed (userid);
+    
+    Hostmask parsed (userid);
     this->_nickname = parsed.nickname;
     this->_username = parsed.username;
     this->_host = parsed.host;

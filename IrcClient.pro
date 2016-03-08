@@ -21,12 +21,12 @@ SOURCES += main.cpp\
     gui/servercfgdialog.cpp \
     gui/sessionform.cpp \
     gui/identitydialog.cpp \
-    irc/userid.cpp \
     irc/channel.cpp \
     irc/nicknamevalidator.cpp \
     irc/user.cpp \
     gui/ircchatbuffer.cpp \
-    gui/channelform.cpp
+    gui/channelform.cpp \
+    irc/hostmask.cpp
 
 HEADERS  += gui/mainwindow.h \
     irc/session.h \
@@ -36,12 +36,12 @@ HEADERS  += gui/mainwindow.h \
     gui/servercfgdialog.h \
     gui/sessionform.h \
     gui/identitydialog.h \
-    irc/userid.h \
     irc/channel.h \
     irc/nicknamevalidator.h \
     irc/user.h \
     gui/ircchatbuffer.h \
-    gui/channelform.h
+    gui/channelform.h \
+    irc/hostmask.h
 
 FORMS    += gui/mainwindow.ui \
     gui/debugform.ui \

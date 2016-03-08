@@ -1,4 +1,4 @@
-#include "userid.h"
+#include "hostmask.h"
 
 #include <QString>
 #include <algorithm>
