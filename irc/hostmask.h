@@ -1,5 +1,5 @@
-#ifndef IRC_USERID_H
-#define IRC_USERID_H
+#ifndef IRC_HOSTMASK_H
+#define IRC_HOSTMASK_H
 
 #include <QString>
 
@@ -32,4 +32,4 @@ private:
 
 }
 
-#endif // IRC_USERID_H
+#endif // IRC_HOSTMASK_H
