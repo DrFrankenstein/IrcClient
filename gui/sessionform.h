@@ -22,6 +22,7 @@ public:
 
 private slots:
     void sessionStateChanged(Irc::Session::State state);
+    void onJoin(QWeakPointer<Irc::User> user, QString channel);
 
 private:
     Ui::SessionForm* ui;

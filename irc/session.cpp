@@ -231,7 +231,7 @@ void Session::handleJoin(const Message& msg)
 {   // [rfc2812 3.2.1]
     const QString& userid = msg.prefix();
     if (msg.params().size() == 0)
-        return;
+        return; // missing channel?
 
     const QString& channelname = msg.params()[0];
 
@@ -264,7 +264,7 @@ void Session::handlePrivMsg(const Message & msg)
 void Session::handleRplWelcome(const Message& msg)
 {   // [rfc2812 3.1]
     this->changeState(Online);
-    // it would be useful to grab and save our nick!user@host here, 
+    // it would be useful to grab and save our hostmask here, 
     // but few servers actually implement rfc2812 completely. even ircd-seven doesn't do it.
     // rfc1459 does not define RPL_WELCOME at all.
     Q_UNUSED(msg);
@@ -303,6 +303,11 @@ QSharedPointer<User> Session::getUser(const QString& id)
 void Session::removeUser(const QString& id)
 {
     this->_users.remove(Hostmask(id).nickname);
+}
+
+QSharedPointer<Channel> Session::getChannel(const QString & name)
+{
+    return this->_channels[name];
 }
 
 }

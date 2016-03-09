@@ -28,7 +28,7 @@
      <widget class="Gui::IrcChatBuffer" name="textEdit">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
+        <horstretch>10</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>

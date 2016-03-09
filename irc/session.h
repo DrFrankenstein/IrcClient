@@ -63,6 +63,8 @@ public:
 
     void privMsg(const QString& target, const QString& message);
 
+    QSharedPointer<Channel> getChannel(const QString& name);
+
 signals:
     void stateChanged(Session::State state);
 

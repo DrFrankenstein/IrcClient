@@ -13,7 +13,7 @@ Channel::Channel(const QString& name, Session* parent)
 {
     this->setObjectName(name);
     
-    connect(this->session(), SIGNAL(messageReceived(QString,QString,QString)),
+    connect(this->session(), SIGNAL(privMsgReceived(QString,QString,QString)),
             this, SLOT(handleMessage(QString,QString,QString)));
 }
 

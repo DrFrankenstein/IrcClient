@@ -6,7 +6,7 @@
 namespace Gui
 {
 
-ChannelForm::ChannelForm(QWidget *parent, Irc::Channel* channel) :
+ChannelForm::ChannelForm(QWidget *parent, QWeakPointer<Irc::Channel> channel) :
     QWidget(parent),
     ui(new Ui::ChannelForm),
     _channel(channel)
