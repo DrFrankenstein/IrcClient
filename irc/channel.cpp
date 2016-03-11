@@ -13,8 +13,8 @@ Channel::Channel(const QString& name, Session* parent)
 {
     this->setObjectName(name);
     
-    connect(this->session(), SIGNAL(privMsgReceived(QString,QString,QString)),
-            this, SLOT(handleMessage(QString,QString,QString)));
+    QObject::connect(this->session(), static_cast<void(Session::*)(QString,QString,QString)>(&Session::privMsgReceived),
+                     this,            static_cast<void(Channel::*)(QString,QString,QString)>(&Channel::handleMessage));
 }
 
 Session* Channel::session() const

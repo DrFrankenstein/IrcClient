@@ -27,11 +27,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-QMdiSubWindow* MainWindow::addSubWindow(QWidget* widget, Qt::WindowFlags flags)
-{
-    return this->ui->mdiArea->addSubWindow(widget, flags);
-}
-
 void MainWindow::on_action_Connect_to_triggered()
 {
     ServerCfgDialog dlg (this);

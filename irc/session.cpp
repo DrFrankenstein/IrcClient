@@ -25,10 +25,10 @@ Session::Session(const QString& address, quint16 port,
       _invisible(invisible), _wallops(wallops),
       _state(Offline), _socket(this)
 {
-    QObject::connect(&this->_socket, SIGNAL(readyRead()),
-                     this, SLOT(socketReadyRead()));
-    QObject::connect(&this->_socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
-                     this, SLOT(socketStateChanged(QAbstractSocket::SocketState)));
+    QObject::connect(&this->_socket, &QTcpSocket::readyRead,
+                     this,           &Session::socketReadyRead);
+    QObject::connect(&this->_socket, &QTcpSocket::stateChanged,
+                     this,           &Session::socketStateChanged);
 }
 
 Session::~Session()

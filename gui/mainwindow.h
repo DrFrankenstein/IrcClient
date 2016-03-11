@@ -22,8 +22,6 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    QMdiSubWindow* addSubWindow(QWidget* widget, Qt::WindowFlags flags = 0);
-
 private slots:
     void on_action_Connect_to_triggered();
 

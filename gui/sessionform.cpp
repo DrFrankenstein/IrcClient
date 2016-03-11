@@ -6,6 +6,8 @@
 #include "../irc/channel.h"
 
 #include <QString>
+#include <QMdiArea>
+#include <QMdiSubWindow>
 
 namespace Gui
 {
@@ -18,10 +20,10 @@ SessionForm::SessionForm(Irc::Session* session, QWidget* parent) :
     ui->setupUi(this);
     session->setParent(this);
 
-    QObject::connect(this->_session, SIGNAL(stateChanged(Session::State)),
-                     this, SLOT(sessionStateChanged(Irc::Session::State)));
-    QObject::connect(this->_session, SIGNAL(joinReceived(QWeakPointer<Irc::User>,QString)),
-                     this, SLOT(onJoin(QWeakPointer<Irc::User>,QString)));
+    QObject::connect(this->_session, &Irc::Session::stateChanged,
+                     this, &SessionForm::sessionStateChanged);
+    QObject::connect(this->_session, static_cast<void(Irc::Session::*)(QWeakPointer<Irc::User>,QString)>(&Irc::Session::joinReceived),
+                     this,           &SessionForm::onJoin);
 }
 
 SessionForm::~SessionForm()
@@ -59,8 +61,8 @@ void SessionForm::onJoin(QWeakPointer<Irc::User> user, QString channel)
         return;
 
     auto form = new ChannelForm(this, ch);
-    MainWindow* mainwin = qobject_cast<MainWindow*>(this->parent());
-    mainwin->addSubWindow(form)->show();
+    QMdiArea* mdi = qobject_cast<QMdiSubWindow*>(this->parent())->mdiArea();
+    mdi->addSubWindow(form)->show();
 }
 
 }

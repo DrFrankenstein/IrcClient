@@ -17,10 +17,10 @@ DebugForm::DebugForm(Irc::Session* session, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(this->_session, SIGNAL(rawLineReceived(QString)),
-            this, SLOT(rawLineReceived(QString)));
-    connect(this->_session, SIGNAL(rawLineSent(QString)),
-            this, SLOT(rawLineSent(QString)));
+    QObject::connect(this->_session, &Irc::Session::rawLineReceived,
+                     this,           &DebugForm::rawLineReceived);
+    QObject::connect(this->_session, &Irc::Session::rawLineSent,
+                     this,           &DebugForm::rawLineSent);
 }
 
 DebugForm::~DebugForm()
