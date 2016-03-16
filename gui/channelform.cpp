@@ -12,8 +12,6 @@ ChannelForm::ChannelForm(QWidget *parent, QWeakPointer<Irc::Channel> channel) :
     _channel(channel)
 {
     ui->setupUi(this);
-
-
 }
 
 ChannelForm::~ChannelForm()

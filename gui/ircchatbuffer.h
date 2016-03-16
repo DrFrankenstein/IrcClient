@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QTextEdit>
 
+#include "../irc/user.h"
+
 namespace Gui
 {
 
@@ -13,6 +15,9 @@ class IrcChatBuffer : public QTextEdit
 
 public:
     IrcChatBuffer(QWidget* parent = 0);
+
+private:
+    void appendMessage(QWeakPointer<Irc::User> user, const QString& message);
 };
 
 }
