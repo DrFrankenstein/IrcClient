@@ -11,7 +11,9 @@ class User : public QObject
 {
     Q_OBJECT
 public:
-    explicit User(QString userid, QObject *parent = 0);
+    explicit User(QString hostmask, QObject *parent = 0);
+
+    const QString& nickname() const;
 
 signals:
 

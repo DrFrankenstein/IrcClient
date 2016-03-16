@@ -4,13 +4,18 @@
 namespace Irc
 {
 
-User::User(QString userid, QObject *parent) : QObject(parent)
+User::User(QString hostmask, QObject *parent) : QObject(parent)
 {
     
-    Hostmask parsed (userid);
+    Hostmask parsed (hostmask);
     this->_nickname = parsed.nickname;
     this->_username = parsed.username;
     this->_host = parsed.host;
+}
+
+const QString & User::nickname() const
+{
+    return this->_nickname;
 }
 
 }

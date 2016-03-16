@@ -11,7 +11,6 @@
 #include <QTcpSocket>
 #include <QMap>
 #include <QHash>
-#include <QSharedPointer>
 #include <utility>
 
 namespace Irc
@@ -237,12 +236,11 @@ void Session::handleJoin(const Message& msg)
 
     if (this->isMe(userid))
     {
-        QSharedPointer<Channel> channel (new Channel(channelname, this));
-        this->_channels.insert(channelname, channel);
+        this->_channels.insert(channelname, new Channel(channelname, this));
     }
 
     emit joinReceived(userid, channelname);
-    QSharedPointer<User> user = this->getUser(userid);
+    User& user = this->getUser(userid);
     emit joinReceived(user, channelname);
 }
 
@@ -257,7 +255,7 @@ void Session::handlePrivMsg(const Message & msg)
                  &text = params[1];
 
     emit privMsgReceived(source, target, text);
-    QSharedPointer<User> user = this->getUser(source);
+    User& user = this->getUser(source);
     emit privMsgReceived(user, target, text);
 }
 
@@ -291,13 +289,17 @@ void Session::registerUser()
     this->sendMessage("USER", {this->_username, QString::number(modes), QStringLiteral("*"), this->_realname});
 }
 
-QSharedPointer<User> Session::getUser(const QString& id)
+User& Session::getUser(const QString& id)
 {
     QString nick = Hostmask(id).nickname;
-    QSharedPointer<User> user = this->_users[nick];
-    if (!user) user.reset(new User(id, this));
+    User* user = this->_users[nick];
+    if (!user)
+    {
+        user = new User(id, this);
+        this->_users.insert(user->nickname(), user);
+    }
 
-    return user;
+    return *user;
 }
 
 void Session::removeUser(const QString& id)
@@ -305,9 +307,9 @@ void Session::removeUser(const QString& id)
     this->_users.remove(Hostmask(id).nickname);
 }
 
-QSharedPointer<Channel> Session::getChannel(const QString & name)
+Channel& Session::getChannel(const QString & name)
 {
-    return this->_channels[name];
+    return *this->_channels[name];
 }
 
 }

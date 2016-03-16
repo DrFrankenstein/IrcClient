@@ -8,7 +8,6 @@
 #include <QMap>
 #include <QHash>
 #include <QTcpSocket>
-#include <QSharedPointer>
 #include <initializer_list>
 
 #include "message.h"
@@ -63,7 +62,7 @@ public:
 
     void privMsg(const QString& target, const QString& message);
 
-    QSharedPointer<Channel> getChannel(const QString& name);
+    Channel& getChannel(const QString& name);
 
 signals:
     void stateChanged(Session::State state);
@@ -72,18 +71,18 @@ signals:
     void rawLineSent(QString line);
 
     void privMsgReceived(QString source, QString target, QString message);
-    void privMsgReceived(QWeakPointer<User> source, QString target, QString message);
+    void privMsgReceived(User& source, QString target, QString message);
 
     void quitReceived(QString user, QString message);
-    void quitReceived(QWeakPointer<User> user, QString message);
+    void quitReceived(User& user, QString message);
 
     void joinReceived(QString user, QString channel);
-    void joinReceived(QWeakPointer<User> user, QString channel);
+    void joinReceived(User& user, QString channel);
     void partReceived(QString user, QString channel, QString message);
-    void partReceived(QWeakPointer<User> user, QString channel, QString message);
+    void partReceived(User& user, QString channel, QString message);
 
     void nickReceived(QString user, QString newnick);
-    void nickReceived(QWeakPointer<User> user, QString newnick);
+    void nickReceived(User& user, QString newnick);
 
 public slots:
     void sendMessage(const Message& msg);
@@ -117,8 +116,8 @@ private:
     QTcpSocket _socket;
     SupportInfo _support;
 
-    QHash<QString, QSharedPointer<Channel> > _channels;
-    QHash<QString, QSharedPointer<User> > _users;
+    QHash<QString, Channel*> _channels;
+    QHash<QString, User*> _users;
 
     void changeState(State state);
 
@@ -135,7 +134,7 @@ private:
     void registerUser();
     void pong(const QString& server);
 
-    QSharedPointer<User> getUser(const QString& id);
+    User& getUser(const QString& id);
     void removeUser(const QString& id);
 };
 

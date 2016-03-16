@@ -2,8 +2,6 @@
 #define CHANNELFORM_H
 
 #include <QWidget>
-#include <QSharedPointer>
-#include <QWeakPointer>
 
 namespace Irc { class Channel; }
 
@@ -19,13 +17,13 @@ class ChannelForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit ChannelForm(QWidget* parent, QWeakPointer<Irc::Channel> channel);
+    explicit ChannelForm(QWidget* parent, Irc::Channel& channel);
     ~ChannelForm();
 
 private:
     Ui::ChannelForm* ui;
 
-    QSharedPointer<Irc::Channel> _channel;
+    Irc::Channel& _channel;
 };
 
 }
