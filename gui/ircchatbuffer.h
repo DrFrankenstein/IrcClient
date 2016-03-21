@@ -17,7 +17,7 @@ public:
     IrcChatBuffer(QWidget* parent = 0);
 
 private:
-    void appendMessage(QWeakPointer<Irc::User> user, const QString& message);
+    void appendMessage(Irc::User& user, const QString& message);
 };
 
 }
