@@ -16,7 +16,7 @@ class IrcChatBuffer : public QTextEdit
 public:
     IrcChatBuffer(QWidget* parent = 0);
 
-private:
+public slots:
     void appendMessage(Irc::User& user, const QString& message);
 };
 

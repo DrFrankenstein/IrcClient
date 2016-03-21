@@ -39,7 +39,7 @@ private slots :
     void handleMessage(User& source, QString target, QString message);
     void handleJoin(User& user, QString channel);
     void handlePart(User& user, QString channel, QString message);
-    void handleQuit(QString user, QString channel, QString message);
+    void handleQuit(QString user, QString message);
 
 private:
     QString _name, _topic;

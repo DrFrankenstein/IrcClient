@@ -193,7 +193,8 @@ void Session::handleMessage(const Message& msg)
         static QHash<QString, Handler> handlers {
           {"NICK", &Session::handleNick},
           {"PING", &Session::handlePing},
-          {"JOIN", &Session::handleJoin}
+          {"JOIN", &Session::handleJoin},
+          {"PRIVMSG", &Session::handlePrivMsg}
         };
 
         Handler handler = handlers.value(msg.command());
