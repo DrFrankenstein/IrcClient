@@ -8,6 +8,9 @@
 namespace Irc
 {
 
+Channel::Channel()
+{}
+
 Channel::Channel(const QString& name, Session* parent)
     : QObject(parent), _name(name)
 {
@@ -24,12 +27,19 @@ Session* Channel::session() const
 
 void Channel::part()
 {
+    if (this->isNull()) return;
     this->session()->part(this->_name);
 }
 
 void Channel::say(const QString& message)
 {
+    if (this->isNull()) return;
     this->session()->privMsg(this->_name, message);
+}
+
+bool Channel::isNull() const
+{
+    return this->_name.isEmpty();
 }
 
 void Channel::handleMessage(QString source, QString target, QString message)

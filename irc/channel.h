@@ -14,12 +14,15 @@ class Channel : public QObject
 {
     Q_OBJECT
 public:
+    Channel();
     explicit Channel(const QString& name, Session* parent = nullptr);
 
     Session* session() const;
 
     void part();
     void say(const QString& message);
+
+    bool isNull() const;
 
 signals:
     void messageReceived(QString source, QString msg);

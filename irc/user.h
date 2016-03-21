@@ -11,9 +11,12 @@ class User : public QObject
 {
     Q_OBJECT
 public:
+    User();
     explicit User(QString hostmask, QObject *parent = 0);
 
     const QString& nickname() const;
+
+    bool isNull() const;
 
 signals:
 

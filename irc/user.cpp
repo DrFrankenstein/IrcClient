@@ -4,6 +4,9 @@
 namespace Irc
 {
 
+User::User()
+{}
+
 User::User(QString hostmask, QObject *parent) : QObject(parent)
 {
     
@@ -13,9 +16,14 @@ User::User(QString hostmask, QObject *parent) : QObject(parent)
     this->_host = parsed.host;
 }
 
-const QString & User::nickname() const
+const QString& User::nickname() const
 {
     return this->_nickname;
+}
+
+bool User::isNull() const
+{
+    return this->_nickname.isEmpty();
 }
 
 }
