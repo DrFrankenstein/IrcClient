@@ -70,19 +70,34 @@ signals:
     void rawLineReceived(QString line);
     void rawLineSent(QString line);
 
-    void privMsgReceived(QString source, QString target, QString message);
-    void privMsgReceived(User& source, QString target, QString message);
+    void nickReceived(QString sender, QString newnick);
+    void nickReceived(User& user, QString newnick);
 
-    void quitReceived(QString user, QString message);
+    void quitReceived(QString sender, QString message);
     void quitReceived(User& user, QString message);
 
-    void joinReceived(QString user, QString channel);
+    void joinReceived(QString sender, QString channel);
     void joinReceived(User& user, QString channel);
-    void partReceived(QString user, QString channel, QString message);
+    void partReceived(QString sender, QString channel, QString message);
     void partReceived(User& user, QString channel, QString message);
 
-    void nickReceived(QString user, QString newnick);
-    void nickReceived(User& user, QString newnick);
+    void topicReceived(QString sender, QString channel, QString topic);
+    void topicReceived(User& user, QString channel, QString topic);
+
+    void inviteReceived(QString sender, QString channel);
+    void inviteReceived(User& user, QString channel);
+
+    void kickReceived(QString sender, QString channel, QString comment);
+    void kickReceived(User& user, QString channel, QString comment);
+
+    void privMsgReceived(QString sender, QString target, QString message);
+    void privMsgReceived(User& user, QString target, QString message);
+
+    void noticeReceived(QString sender, QString target, QString text);
+    void noticeReceived(User& user, QString target, QString text);
+
+    void wallopsReceived(QString sender, QString text);
+    void wallopsReceived(User& user, QString text);
 
 public slots:
     void sendMessage(const Message& msg);
