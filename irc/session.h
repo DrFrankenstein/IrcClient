@@ -46,6 +46,7 @@ public:
     const QString& nickname() const;
     void changeNickname(const QString& nick);
     bool isMe(const QString& id);
+    bool isMe(const User& user);
 
     void oper(const QString& name, const QString& password);
 

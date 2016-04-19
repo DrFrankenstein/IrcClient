@@ -56,11 +56,14 @@ void SessionForm::sessionStateChanged(Irc::Session::State state)
 
 void SessionForm::onJoin(Irc::User& user, QString channel)
 {
-    Irc::Channel& ch = this->_session->getChannel(channel);
+    if (this->_session->isMe(user))
+    {
+        Irc::Channel& ch = this->_session->getChannel(channel);
 
-    auto form = new ChannelForm(this, ch);
-    QMdiArea* mdi = qobject_cast<QMdiSubWindow*>(this->parent())->mdiArea();
-    mdi->addSubWindow(form)->show();
+        auto form = new ChannelForm(this, ch);
+        QMdiArea* mdi = qobject_cast<QMdiSubWindow*>(this->parent())->mdiArea();
+        mdi->addSubWindow(form)->show();
+    }
 }
 
 }

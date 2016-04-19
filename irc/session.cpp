@@ -73,6 +73,11 @@ bool Session::isMe(const QString &id)
         return id == this->_currentNickname;
 }
 
+bool Session::isMe(const User& user)
+{
+    return user.nickname() == this->_currentNickname;
+}
+
 void Session::oper(const QString& name, const QString& password)
 {   // [rfc2812 3.1.4]
     this->sendMessage("OPER", {name, password});
@@ -155,6 +160,7 @@ void Session::socketStateChanged(QAbstractSocket::SocketState socketState)
     case QAbstractSocket::ConnectedState:
         this->registerUser();
         break;
+
     default: qt_noop();
     }
 }
@@ -205,8 +211,14 @@ void Session::handleMessage(const Message& msg)
 
 void Session::handleNick(const Message& msg)
 {   // [rfc2812 3.1.2]
-    if (this->isMe(msg.prefix()))
-        this->_currentNickname = msg.params().at(0);
+    QString user = msg.prefix(),
+        newnick = msg.params().at(0);
+
+    if (this->isMe(user))
+        this->_currentNickname = newnick;
+
+    emit nickReceived(user, newnick);
+    emit nickReceived(this->getUser(user), newnick);
 }
 
 void Session::handleQuit(const Message& msg)
