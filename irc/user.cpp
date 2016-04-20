@@ -23,7 +23,7 @@ User::User(QString hostmask, QObject* parent) : QObject(parent)
     if (session)
     {
         QObject::connect(session, static_cast<void(Session::*)(User&,QString)>(&Session::nickReceived),
-                         this,    &User::handleNick);
+                         this,    &User::handleNickChange);
     }
 }
 
@@ -37,7 +37,7 @@ bool User::isNull() const
     return this->_nickname.isEmpty();
 }
 
-void User::handleNick(User& user, QString newnick)
+void User::handleNickChange(User& user, QString newnick)
 {
     if (addressof(user) != this)
         return;

@@ -21,7 +21,7 @@ public:
 signals:
 
 public slots:
-    void handleNick(User&, QString newnick);
+    void handleNickChange(User&, QString newnick);
 
 private:
     QString _nickname, _username, _host;
