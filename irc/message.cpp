@@ -98,7 +98,7 @@ bool Message::parse(const QString &raw)
 {
     auto it = raw.constBegin(), end = raw.constEnd();
 
-    // [ircv3.2] <message> ::= ['@' <tags> <SPACE>] [':' <prefix> <SPACE> ] <command> <params> <crlf
+    // [ircv3.2] <message> ::= ['@' <tags> <SPACE>] [':' <prefix> <SPACE> ] <command> <params> <crlf>
     if (it == end)
         return false;   // nothing to parse
 
@@ -114,6 +114,9 @@ bool Message::parse(const QString &raw)
     {
         if (!this->parsePrefix(++it, end))
             return false;   // no valid prefix after ':'
+
+        // dereferencing NULL pointer 'it': I don't think that QString::constBegin ever returns NULL.
+#       pragma warning(suppress:6011)
         if (it == end || *it++ != ' ')
             return false;   // missing space after prefix
     }
