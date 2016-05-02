@@ -24,6 +24,10 @@ Channel::Channel(const QString& name, Session* parent)
                      this,            &Channel::handleJoin);
     QObject::connect(this->session(), static_cast<void(Session::*)(User&,QString,QString)>(&Session::partReceived),
                      this,            &Channel::handlePart);
+    QObject::connect(this->session(), static_cast<void(Session::*)(QString,QString,QString)>(&Session::topicReceived),
+                     this,            static_cast<void(Channel::*)(QString,QString,QString)>(&Channel::handleTopic));
+    QObject::connect(this->session(), static_cast<void(Session::*)(User&,QString,QString)>(&Session::topicReceived),
+                     this,            static_cast<void(Channel::*)(User&,QString,QString)>(&Channel::handleTopic));
     QObject::connect(this->session(), static_cast<void(Session::*)(QString,QString)>(&Session::quitReceived),
                      this,            &Channel::handleQuit);
 }
@@ -82,9 +86,26 @@ void Channel::handlePart(User& user, QString channel, QString message)
     emit partReceived(user, message);
 }
 
+void Channel::handleTopic(QString user, QString channel, QString topic)
+{
+    if (channel != this->_name)
+        return;
+
+    this->_topic = topic;
+
+    emit topicChanged(user, topic);
+}
+
+void Channel::handleTopic(User& user, QString channel, QString topic)
+{
+    if (channel != this->_name)
+        return;
+
+    emit topicChanged(user, topic);
+}
+
 void Channel::handleQuit(QString user, QString message)
 {
 }
 
 }
-

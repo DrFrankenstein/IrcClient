@@ -141,8 +141,11 @@ private:
     void handleNick(const Message& msg);
     void handleQuit(const Message& msg);
     void handlePing(const Message& msg);
+
     void handleJoin(const Message& msg);
     void handlePart(const Message& msg);
+    void handleTopic(const Message& msg);
+
     void handlePrivMsg(const Message& msg);
 
     void handleRplWelcome(const Message& msg);

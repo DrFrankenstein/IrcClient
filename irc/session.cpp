@@ -201,6 +201,7 @@ void Session::handleMessage(const Message& msg)
           {"PING", &Session::handlePing},
           {"JOIN", &Session::handleJoin},
           {"PART", &Session::handlePart},
+          {"TOPIC", &Session::handleTopic},
           {"PRIVMSG", &Session::handlePrivMsg}
         };
 
@@ -259,13 +260,13 @@ void Session::handleJoin(const Message& msg)
 }
 
 void Session::handlePart(const Message & msg)
-{
+{   // [rfc2812 3.2.2]
     const QString& hostmask = msg.prefix();
     if (msg.params().size() == 0)
         return; // missing channel?
 
     const QString& channelname = msg.params()[0],
-                 &partMessage = msg.params().size() > 1? msg.params()[1] : QString();
+                 & partMessage = msg.params().size() > 1? msg.params()[1] : QString();
     Channel& ch = this->getChannel(channelname);
 
     emit partReceived(hostmask, channelname, partMessage);
@@ -276,6 +277,21 @@ void Session::handlePart(const Message & msg)
         this->_channels.remove(channelname);
 
     ch.deleteLater();
+}
+
+void Session::handleTopic(const Message & msg)
+{   // [rfc2812 3.2.4]
+    const QString& hostmask = msg.prefix();
+
+    if (msg.params().size() < 2)
+        return; // missing channel or topic?
+
+    const QString& channelname = msg.params()[0],
+                 & topic = msg.params()[1];
+
+    emit topicReceived(hostmask, channelname, topic);
+    User& user = this->getUser(hostmask);
+    emit topicReceived(user, channelname, topic);
 }
 
 void Session::handlePrivMsg(const Message & msg)
