@@ -200,11 +200,12 @@ void Session::handleMessage(const Message& msg)
           {"NICK", &Session::handleNick},
           {"PING", &Session::handlePing},
           {"JOIN", &Session::handleJoin},
+          {"PART", &Session::handlePart},
           {"PRIVMSG", &Session::handlePrivMsg}
         };
 
         Handler handler = handlers.value(msg.command());
-        if (handler != NULL)
+        if (handler != nullptr)
             (this->*handler)(msg);
     }
 }
@@ -241,20 +242,40 @@ void Session::handlePing(const Message& msg)
 
 void Session::handleJoin(const Message& msg)
 {   // [rfc2812 3.2.1]
-    const QString& userid = msg.prefix();
+    const QString& hostmask = msg.prefix();
     if (msg.params().size() == 0)
         return; // missing channel?
 
     const QString& channelname = msg.params()[0];
 
-    if (this->isMe(userid))
+    if (this->isMe(hostmask))
     {
         this->_channels.insert(channelname, new Channel(channelname, this));
     }
 
-    emit joinReceived(userid, channelname);
-    User& user = this->getUser(userid);
+    emit joinReceived(hostmask, channelname);
+    User& user = this->getUser(hostmask);
     emit joinReceived(user, channelname);
+}
+
+void Session::handlePart(const Message & msg)
+{
+    const QString& hostmask = msg.prefix();
+    if (msg.params().size() == 0)
+        return; // missing channel?
+
+    const QString& channelname = msg.params()[0],
+                 &partMessage = msg.params().size() > 1? msg.params()[1] : QString();
+    Channel& ch = this->getChannel(channelname);
+
+    emit partReceived(hostmask, channelname, partMessage);
+    User& user = this->getUser(hostmask);
+    emit partReceived(user, channelname, partMessage);
+
+    if (this->isMe(hostmask))
+        this->_channels.remove(channelname);
+
+    ch.deleteLater();
 }
 
 void Session::handlePrivMsg(const Message & msg)
