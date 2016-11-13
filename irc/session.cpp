@@ -230,6 +230,7 @@ void Session::handleQuit(const Message& msg)
         reason = msg.params().size() > 0 ? 
             msg.params()[0] : 
             QString();
+
     emit quitReceived(user, reason);
     emit quitReceived(this->getUser(user), reason);
 
@@ -334,8 +335,10 @@ void Session::registerUser()
     this->changeNickname(this->_nicknames[0]);
 
     int modes = 0;
-    if (this->_wallops) modes |= 4;
-    if (this->_invisible) modes |= 8;
+    if (this->_wallops)
+        modes |= 4;
+    if (this->_invisible)
+        modes |= 8;
     this->sendMessage("USER", {this->_username, QString::number(modes), QStringLiteral("*"), this->_realname});
 }
 

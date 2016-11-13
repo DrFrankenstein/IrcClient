@@ -76,7 +76,13 @@ bool Hostmask::parseUsername(QString::const_iterator& it, const QString::const_i
 {
     QString::const_iterator start = it;
 
-    while (it != end && *it != '@' && *it != '\0' && *it != '\r' && *it != '\n' && *it != ' ')
+    while (it != end 
+        && *it != '@'
+        && *it != '\0'
+        && *it != '\r'
+        && *it != '\n'
+        && *it != ' '
+        )
         ++it;
 
     this->username = QString(start, it - start);
@@ -89,7 +95,12 @@ bool Hostmask::parseHost(QString::const_iterator& it, const QString::const_itera
     QString::const_iterator start = it;
 
     // We don't validate that the host conforms to RFCs 2812 and 1123 besides from the character set.
-    while ((it != end && it->isLetter()) || it->isDigit() || *it == '.' || *it == '-' || *it == ':')
+    while ((it != end && it->isLetter())
+        || it->isDigit()
+        || *it == '.'
+        || *it == '-'
+        || *it == ':'
+        )
         ++it;
 
     this->host = QString(start, it - start);

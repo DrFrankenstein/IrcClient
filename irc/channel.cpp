@@ -39,13 +39,17 @@ Session* Channel::session() const
 
 void Channel::part()
 {
-    if (this->isNull()) return;
+    if (this->isNull()) 
+        return;
+
     this->session()->part(this->_name);
 }
 
 void Channel::say(const QString& message)
 {
-    if (this->isNull()) return;
+    if (this->isNull())
+        return;
+
     this->session()->privMsg(this->_name, message);
 }
 

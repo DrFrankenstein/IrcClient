@@ -110,7 +110,7 @@ void SupportInfo::setParam(const QString& name, const QString& value)
 
 void SupportInfo::clearParam(const QString& name)
 {
-    setDefaults();
+    this->setDefaults();
 
     function<void(SupportInfo*)> setter = defaults.value(name);
     if (setter)
@@ -294,7 +294,8 @@ void SupportInfo::setMaxchannelsParam(const QString& value)
 
     bool ok;
     int limit = value.toInt(&ok);
-    if (!ok) return;
+    if (!ok)
+        return;
 
     for (QChar prefix : this->chantypes)
         this->chanlimit.insert(prefix, limit);
@@ -319,7 +320,8 @@ void SupportInfo::setMaxbansParam(const QString& value)
 
     if (it != this->maxlist.end())
     {   // found one.
-        if (it->second == limit) return;    // no change.
+        if (it->second == limit)
+            return;    // no change.
         if (it->first == "b")
         {   // limit isn't shared with others. good. just change it.
             it->second = limit;
@@ -364,7 +366,8 @@ QList<pair<QString, int> > SupportInfo::parsePairList(const QString& value)
     for (auto item : value.splitRef(','))
     {
         int colon = item.indexOf(':');
-        if (colon == -1) continue;  // missing ':'
+        if (colon == -1) 
+            continue;  // missing ':'
         auto left = item.mid(0, colon);
         auto right = item.mid(colon + 1);
 
@@ -375,7 +378,8 @@ QList<pair<QString, int> > SupportInfo::parsePairList(const QString& value)
         {
             bool ok;
             number = right.toInt(&ok);
-            if (!ok) continue;  // couldn't parse number.
+            if (!ok)
+                continue;  // couldn't parse number.
         }
 
         parsed.append(make_pair(left.toString(), number));
@@ -401,8 +405,10 @@ QString SupportInfo::unescapeValue(const QStringRef& range)
     {
         QChar c = *it;
 
-        if (c == '\\') c = unescapeChar(it, end);
-        else ++it;
+        if (c == '\\')
+            c = unescapeChar(it, end);
+        else
+            ++it;
 
         unescaped.append(c);
     }
@@ -413,7 +419,8 @@ QString SupportInfo::unescapeValue(const QStringRef& range)
 QChar SupportInfo::unescapeChar(QString::const_iterator& it, const QString::const_iterator& end)
 {
     QString::const_iterator escape = ++it;
-    if (escape == end || *escape++ != 'x') return '\\';
+    if (escape == end || *escape++ != 'x')
+        return '\\';
 
     QString hex (escape, 2);
     bool ok;

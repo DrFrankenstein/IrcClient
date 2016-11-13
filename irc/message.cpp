@@ -319,7 +319,8 @@ bool Message::parseParams(QString::const_iterator& it, const QString::const_iter
 
     if (it != end && *it == ' ')
     {   // 15th parameter, rest of the message gets thrown in regardless of spaces
-        if (*++it == ':') ++it;   // still consume ':' if there's one
+        if (*++it == ':')
+            ++it;   // still consume ':' if there's one
         this->parseParam(it, end, true);
     }
 

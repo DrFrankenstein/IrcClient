@@ -11,7 +11,7 @@ IrcChatBuffer::IrcChatBuffer(QWidget* parent)
     this->setReadOnly(true);
 }
 
-void IrcChatBuffer::appendMessage(Irc::User& user, const QString & message)
+void IrcChatBuffer::appendMessage(Irc::User& user, const QString& message)
 {
     QTextCursor cur (this->document());
     cur.movePosition(QTextCursor::End);

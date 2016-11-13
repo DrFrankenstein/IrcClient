@@ -13,7 +13,7 @@
 namespace Gui
 {
 
-// Custom item delegate that adds an NicknameValidator to the line edit when editing a nickname entry.
+// Custom item delegate that adds a NicknameValidator to the line edit when editing a nickname entry.
 class NicknameItemDelegate : public QStyledItemDelegate
 {
 public:
@@ -33,9 +33,9 @@ public:
     }
 };
 
-IdentityDialog::IdentityDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::IdentityDialog)
+IdentityDialog::IdentityDialog(QWidget *parent) 
+    : QDialog(parent),
+      ui(new Ui::IdentityDialog)
 {
     ui->setupUi(this);
     ui->nicknamesListWidget->setItemDelegate(new NicknameItemDelegate(this));
