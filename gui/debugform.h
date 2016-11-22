@@ -27,6 +27,8 @@ private slots:
     void rawLineReceived(QString line);
     void rawLineSent(QString line);
 
+    void onISupportReceived(const Irc::SupportInfo& support);
+
     void on_inputLineEdit_returnPressed();
 
 private:

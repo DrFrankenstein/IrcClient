@@ -21,6 +21,8 @@ DebugForm::DebugForm(Irc::Session* session, QWidget *parent) :
                      this,           &DebugForm::rawLineReceived);
     QObject::connect(this->_session, &Irc::Session::rawLineSent,
                      this,           &DebugForm::rawLineSent);
+    QObject::connect(this->_session, &Irc::Session::iSupportReceived,
+                     this,           &DebugForm::onISupportReceived);
 }
 
 DebugForm::~DebugForm()
@@ -36,6 +38,14 @@ void DebugForm::rawLineReceived(QString line)
 void DebugForm::rawLineSent(QString line)
 {
     this->addLine(QBrush(Qt::red), QStringLiteral("<-- "), line);
+}
+
+void DebugForm::onISupportReceived(const Irc::SupportInfo& support)
+{
+    const QString& network = support.networkName();
+
+    if (!network.isEmpty())
+        this->setWindowTitle(tr("Debug: %1 on %2").arg(this->_session->nickname(), network));
 }
 
 void DebugForm::addLine(const QBrush& prefixBrush, const QString& prefix, const QString& text)

@@ -37,6 +37,11 @@ Session* Channel::session() const
     return qobject_cast<Session*>(this->parent());
 }
 
+const QString& Channel::name() const
+{
+    return this->_name;
+}
+
 void Channel::part()
 {
     if (this->isNull()) 

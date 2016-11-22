@@ -18,6 +18,8 @@ ChannelForm::ChannelForm(QWidget *parent, Irc::Channel& channel) :
 
     QObject::connect(addressof(channel), static_cast<void(Irc::Channel::*)(Irc::User&, QString)>(&Irc::Channel::messageReceived),
                      ui->textEdit,       &IrcChatBuffer::appendMessage);
+
+    this->setWindowTitle(tr("Channel: %1").arg(this->_channel.name()));
 }
 
 ChannelForm::~ChannelForm()

@@ -37,6 +37,12 @@ SupportInfo::~SupportInfo()
 {
 }
 
+const QString& SupportInfo::networkName() const
+{
+    return this->network;
+}
+
+
 void SupportInfo::parseToken(const QString& token)
 {
     if (token.contains(' '))

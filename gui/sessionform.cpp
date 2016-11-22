@@ -22,6 +22,8 @@ SessionForm::SessionForm(Irc::Session* session, QWidget* parent) :
 
     QObject::connect(this->_session, &Irc::Session::stateChanged,
                      this, &SessionForm::sessionStateChanged);
+    QObject::connect(this->_session, &Irc::Session::iSupportReceived,
+                     this,           &SessionForm::onISupportReceived);
     QObject::connect(this->_session, static_cast<void(Irc::Session::*)(Irc::User&,QString)>(&Irc::Session::joinReceived),
                      this,           &SessionForm::onJoin);
 }
@@ -52,6 +54,18 @@ void SessionForm::sessionStateChanged(Irc::Session::State state)
     }
 
     ui->networkNameLabel->setText(text);
+}
+
+void SessionForm::onISupportReceived(const Irc::SupportInfo& support)
+{
+    const QString& network = support.networkName();
+
+    if (!network.isEmpty())
+    {
+        ui->networkNameLabel->setText(network);
+
+        this->setWindowTitle(tr("Session: %1 on %2").arg(this->_session->nickname(), network));
+    }
 }
 
 void SessionForm::onJoin(Irc::User& user, QString channel)

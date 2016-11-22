@@ -39,6 +39,11 @@ const SupportInfo& Session::support() const
     return this->_support;
 }
 
+const QString& Session::networkName() const
+{
+    return this->_support.networkName();
+}
+
 void Session::open()
 {
     this->_socket.connectToHost(this->_address, this->_port);
@@ -323,6 +328,8 @@ void Session::handleRplISupport(const Message & msg)
 {   // <http://www.irc.org/tech_docs/005.html>
     const QStringList& params = msg.params();
     this->_support.parseISupport(params.constBegin() + 1, params.constEnd()); // + 1 to skip nickname
+
+    emit iSupportReceived(this->_support);
 }
 
 void Session::registerUser()

@@ -40,6 +40,8 @@ public:
 
     const SupportInfo& support() const;
 
+    const QString& networkName() const;
+
     void open();
     void close();
 
@@ -99,6 +101,8 @@ signals:
 
     void wallopsReceived(QString sender, QString text);
     void wallopsReceived(User& user, QString text);
+
+    void iSupportReceived(const SupportInfo& info);
 
 public slots:
     void sendMessage(const Message& msg);

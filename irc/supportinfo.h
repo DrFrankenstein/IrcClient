@@ -34,6 +34,8 @@ public:
                                             this, std::placeholders::_1));
     }
 
+    const QString& networkName() const;
+
 private:
     // ISUPPORT
     CaseMapping casemapping;
@@ -42,7 +44,7 @@ private:
     QSet<QChar> chanmodesB;    // chan setting modes with parameters (e.g. 'k')
     QSet<QChar> chanmodesC;    // chan settings, takes a parameter when set
     QSet<QChar> chanmodesD;    // no parameters
-    uint channellen;QString val;
+    uint channellen;
     QSet<QChar> chantypes;
     QChar excepts;
     QMap<QChar, uint> idchan;

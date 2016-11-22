@@ -19,6 +19,8 @@ public:
 
     Session* session() const;
 
+    const QString& name() const;
+
     void part();
     void say(const QString& message);
 
