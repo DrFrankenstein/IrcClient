@@ -23,6 +23,8 @@ DebugForm::DebugForm(Irc::Session* session, QWidget *parent) :
                      this,           &DebugForm::rawLineSent);
     QObject::connect(this->_session, &Irc::Session::iSupportReceived,
                      this,           &DebugForm::onISupportReceived);
+    QObject::connect(this->_session, static_cast<void(Irc::Session::*)(Irc::User&,QString)>(&Irc::Session::nickReceived),
+                     this,           &DebugForm::onNick);
 }
 
 DebugForm::~DebugForm()
@@ -42,10 +44,17 @@ void DebugForm::rawLineSent(QString line)
 
 void DebugForm::onISupportReceived(const Irc::SupportInfo& support)
 {
-    const QString& network = support.networkName();
+    this->updateTitle();
 
-    if (!network.isEmpty())
-        this->setWindowTitle(tr("Debug: %1 on %2").arg(this->_session->nickname(), network));
+    Q_UNUSED(support);
+}
+
+void DebugForm::onNick(const Irc::User& user, QString newnick)
+{
+    if (this->_session->isMe(user))
+        this->updateTitle();
+
+    Q_UNUSED(newnick);
 }
 
 void DebugForm::addLine(const QBrush& prefixBrush, const QString& prefix, const QString& text)
@@ -71,6 +80,14 @@ void DebugForm::on_inputLineEdit_returnPressed()
     auto edit = ui->inputLineEdit;
     this->_session->sendRaw(edit->text().append("\r\n").toUtf8());
     edit->clear();
+}
+
+void DebugForm::updateTitle()
+{
+    this->setWindowTitle(tr("Debug: %1 on %2").arg(
+                             this->_session->nickname(),
+                             this->_session->networkName()
+                             ));
 }
 
 }

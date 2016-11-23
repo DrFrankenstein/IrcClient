@@ -26,6 +26,8 @@ SessionForm::SessionForm(Irc::Session* session, QWidget* parent) :
                      this,           &SessionForm::onISupportReceived);
     QObject::connect(this->_session, static_cast<void(Irc::Session::*)(Irc::User&,QString)>(&Irc::Session::joinReceived),
                      this,           &SessionForm::onJoin);
+    QObject::connect(this->_session, static_cast<void(Irc::Session::*)(Irc::User&,QString)>(&Irc::Session::nickReceived),
+                     this,           &SessionForm::onNick);
 }
 
 SessionForm::~SessionForm()
@@ -61,11 +63,9 @@ void SessionForm::onISupportReceived(const Irc::SupportInfo& support)
     const QString& network = support.networkName();
 
     if (!network.isEmpty())
-    {
         ui->networkNameLabel->setText(network);
 
-        this->setWindowTitle(tr("Session: %1 on %2").arg(this->_session->nickname(), network));
-    }
+    this->updateTitle();
 }
 
 void SessionForm::onJoin(Irc::User& user, QString channel)
@@ -78,6 +78,22 @@ void SessionForm::onJoin(Irc::User& user, QString channel)
         QMdiArea* mdi = qobject_cast<QMdiSubWindow*>(this->parent())->mdiArea();
         mdi->addSubWindow(form)->show();
     }
+}
+
+void SessionForm::onNick(Irc::User &user, QString newnick)
+{
+    if (this->_session->isMe(user))
+        this->updateTitle();
+
+    Q_UNUSED(newnick);
+}
+
+void SessionForm::updateTitle()
+{
+    this->setWindowTitle(tr("Session: %1 on %2").arg(
+                             this->_session->nickname(),
+                             this->_session->networkName()
+                             ));
 }
 
 }

@@ -28,6 +28,7 @@ private slots:
     void rawLineSent(QString line);
 
     void onISupportReceived(const Irc::SupportInfo& support);
+    void onNick(const Irc::User& user, QString newnick);
 
     void on_inputLineEdit_returnPressed();
 
@@ -37,6 +38,7 @@ private:
     Irc::Session* _session;
 
     void addLine(const QBrush& prefixBrush, const QString& prefix, const QString& text);
+    void updateTitle();
 };
 
 }

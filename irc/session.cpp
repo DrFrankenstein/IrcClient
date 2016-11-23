@@ -41,7 +41,12 @@ const SupportInfo& Session::support() const
 
 const QString& Session::networkName() const
 {
-    return this->_support.networkName();
+    const QString& name = this->_support.networkName();
+
+    if (name.isEmpty())
+        return this->_address;
+
+    return name;
 }
 
 void Session::open()

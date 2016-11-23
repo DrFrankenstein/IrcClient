@@ -25,11 +25,14 @@ private slots:
     void sessionStateChanged(Irc::Session::State state);
     void onISupportReceived(const Irc::SupportInfo& support);
     void onJoin(Irc::User& user, QString channel);
+    void onNick(Irc::User& user, QString newnick);
 
 private:
     Ui::SessionForm* ui;
 
     Irc::Session* _session;
+
+    void updateTitle();
 };
 
 }
