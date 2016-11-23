@@ -64,3 +64,8 @@ win32-msvc*:{
     # C4718: recursive call has no side effects, deleting. Triggered by included template code.
     QMAKE_CXXFLAGS += -wd4718
 }
+
+gcc|clang {
+    # We use pragmas throughout the project to silence/justify warnings in MSVC.
+    QMAKE_CXXFLAGS += -Wno-unknown-pragmas
+}
