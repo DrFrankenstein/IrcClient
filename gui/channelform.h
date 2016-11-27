@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-namespace Irc { class Channel; }
+namespace Irc { class Channel; class User; }
 
 namespace Gui
 {
@@ -19,6 +19,10 @@ class ChannelForm : public QWidget
 public:
     explicit ChannelForm(QWidget* parent, Irc::Channel& channel);
     ~ChannelForm();
+
+private slots:
+    void handleJoin(Irc::User& user);
+    void handlePart(Irc::User& user, QString message);
 
 private:
     Ui::ChannelForm* ui;

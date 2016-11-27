@@ -18,6 +18,10 @@ public:
 
 public slots:
     void appendMessage(Irc::User& user, const QString& message);
+    void appendEvent(Irc::User& user, const QString& message);
+
+private:
+    QTextCursor beginNewLine();
 };
 
 }
