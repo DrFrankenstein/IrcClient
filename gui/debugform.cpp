@@ -51,10 +51,10 @@ void DebugForm::onISupportReceived(const Irc::SupportInfo& support)
 
 void DebugForm::onNick(const Irc::User& user, QString newnick)
 {
-    if (this->_session->isMe(user))
+    if (this->_session->isMe(newnick))
         this->updateTitle();
 
-    Q_UNUSED(newnick);
+    Q_UNUSED(user);
 }
 
 void DebugForm::addLine(const QBrush& prefixBrush, const QString& prefix, const QString& text)

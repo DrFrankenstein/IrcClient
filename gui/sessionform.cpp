@@ -82,10 +82,10 @@ void SessionForm::onJoin(Irc::User& user, QString channel)
 
 void SessionForm::onNick(Irc::User &user, QString newnick)
 {
-    if (this->_session->isMe(user))
+    if (this->_session->isMe(newnick))
         this->updateTitle();
 
-    Q_UNUSED(newnick);
+    Q_UNUSED(user);
 }
 
 void SessionForm::updateTitle()
