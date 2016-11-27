@@ -17,9 +17,10 @@ void IrcChatBuffer::appendMessage(Irc::User& user, const QString& message)
 
     QTextCharFormat fmt;
     fmt.setFontWeight(QFont::Bold);
-    cur.insertText(QString("<%1> ").arg(user.nickname()), fmt);
+        cur.insertText(QString("<%1> ").arg(user.nickname()), fmt);
+    fmt.setFontWeight(QFont::Normal);
 
-    cur.insertText(message);
+    cur.insertText(message, fmt);
 }
 
 void IrcChatBuffer::appendEvent(Irc::User& user, const QString& message)
