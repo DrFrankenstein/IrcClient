@@ -50,6 +50,8 @@ public:
     bool isMe(const QString& id);
     bool isMe(const User& user);
 
+    User& me();
+
     void oper(const QString& name, const QString& password);
 
     void setMode(const QString& modes);

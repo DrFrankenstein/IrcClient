@@ -88,6 +88,12 @@ bool Session::isMe(const User& user)
     return user.nickname() == this->_currentNickname;
 }
 
+User& Session::me()
+{   // TODO this currently depends on getUser being called with our own hostmask before this
+    // we need to find a reliable way to grab it on login.
+    return *this->_users.value(this->_currentNickname);
+}
+
 void Session::oper(const QString& name, const QString& password)
 {   // [rfc2812 3.1.4]
     this->sendMessage("OPER", {name, password});

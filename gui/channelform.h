@@ -24,6 +24,8 @@ private slots:
     void handleJoin(Irc::User& user);
     void handlePart(Irc::User& user, QString message);
 
+    void on_lineEdit_returnPressed();
+
 private:
     Ui::ChannelForm* ui;
 

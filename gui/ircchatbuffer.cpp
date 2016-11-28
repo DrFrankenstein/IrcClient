@@ -21,6 +21,8 @@ void IrcChatBuffer::appendMessage(Irc::User& user, const QString& message)
     fmt.setFontWeight(QFont::Normal);
 
     cur.insertText(message, fmt);
+
+    this->setTextCursor(cur);
 }
 
 void IrcChatBuffer::appendEvent(Irc::User& user, const QString& message)

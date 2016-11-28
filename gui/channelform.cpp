@@ -2,7 +2,12 @@
 #include "ui_channelform.h"
 
 #include "../irc/channel.h"
+#include "../irc/session.h"
 #include "../irc/user.h"
+
+#include <QObject>
+#include <QWidget>
+#include <QLineEdit>
 
 namespace Gui
 {
@@ -24,6 +29,11 @@ ChannelForm::ChannelForm(QWidget *parent, Irc::Channel& channel) :
     this->setWindowTitle(tr("Channel: %1").arg(this->_channel.name()));
 }
 
+ChannelForm::~ChannelForm()
+{
+    delete ui;
+}
+
 void ChannelForm::handleJoin(Irc::User& user)
 {
     ui->textEdit->appendEvent(user, tr("has joined"));
@@ -34,9 +44,15 @@ void ChannelForm::handlePart(Irc::User& user, QString message)
     ui->textEdit->appendEvent(user, tr("has parted (%1)").arg(message));
 }
 
-ChannelForm::~ChannelForm()
+void Gui::ChannelForm::on_lineEdit_returnPressed()
 {
-    delete ui;
+    QLineEdit* input = ui->lineEdit;
+    QString message = input->text();
+
+    ui->textEdit->appendMessage(this->_channel.session()->me(), message);
+
+    this->_channel.say(message);
+    input->clear();
 }
 
 }
