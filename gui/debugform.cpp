@@ -42,7 +42,7 @@ void DebugForm::rawLineSent(QString line)
     this->addLine(QBrush(Qt::red), QStringLiteral("<-- "), line);
 }
 
-void DebugForm::onISupportReceived(const Irc::SupportInfo& support)
+void DebugForm::onISupportReceived(const Irc::Capabilities& support)
 {
     this->updateTitle();
 

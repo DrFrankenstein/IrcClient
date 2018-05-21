@@ -11,7 +11,7 @@
 #include <initializer_list>
 
 #include "message.h"
-#include "supportinfo.h"
+#include "capabilities.h"
 #include "channel.h"
 #include "user.h"
 
@@ -38,7 +38,7 @@ public:
                         QObject* parent = nullptr);
     ~Session();
 
-    const SupportInfo& support() const;
+    const Capabilities& support() const;
 
     const QString& networkName() const;
 
@@ -104,7 +104,7 @@ signals:
     void wallopsReceived(QString sender, QString text);
     void wallopsReceived(User& user, QString text);
 
-    void iSupportReceived(const SupportInfo& info);
+    void iSupportReceived(const Capabilities& info);
 
 public slots:
     void sendMessage(const Message& msg);
@@ -136,7 +136,7 @@ private:
     State _state;
 
     QTcpSocket _socket;
-    SupportInfo _support;
+    Capabilities _capabilities;
 
     QHash<QString, Channel*> _channels;
     QHash<QString, User*> _users;

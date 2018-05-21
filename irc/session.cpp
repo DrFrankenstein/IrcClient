@@ -1,7 +1,7 @@
 #include "session.h"
 
 #include "message.h"
-#include "supportinfo.h"
+#include "capabilities.h"
 #include "hostmask.h"
 #include "channel.h"
 
@@ -34,14 +34,14 @@ Session::~Session()
 {
 }
 
-const SupportInfo& Session::support() const
+const Capabilities& Session::support() const
 {
-    return this->_support;
+    return this->_capabilities;
 }
 
 const QString& Session::networkName() const
 {
-    const QString& name = this->_support.networkName();
+    const QString& name = this->_capabilities.networkName();
 
     if (name.isEmpty())
         return this->_address;
@@ -338,9 +338,9 @@ void Session::handleRplWelcome(const Message& msg)
 void Session::handleRplISupport(const Message & msg)
 {   // <http://www.irc.org/tech_docs/005.html>
     const QStringList& params = msg.params();
-    this->_support.parseISupport(params.constBegin() + 1, params.constEnd()); // + 1 to skip nickname
+    this->_capabilities.parseISupport(params.constBegin() + 1, params.constEnd()); // + 1 to skip nickname
 
-    emit iSupportReceived(this->_support);
+    emit iSupportReceived(this->_capabilities);
 }
 
 void Session::registerUser()

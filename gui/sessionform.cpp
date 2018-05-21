@@ -58,7 +58,7 @@ void SessionForm::sessionStateChanged(Irc::Session::State state)
     ui->networkNameLabel->setText(text);
 }
 
-void SessionForm::onISupportReceived(const Irc::SupportInfo& support)
+void SessionForm::onISupportReceived(const Irc::Capabilities& support)
 {
     const QString& network = support.networkName();
 

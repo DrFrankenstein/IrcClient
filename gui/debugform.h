@@ -27,7 +27,7 @@ private slots:
     void rawLineReceived(QString line);
     void rawLineSent(QString line);
 
-    void onISupportReceived(const Irc::SupportInfo& support);
+    void onISupportReceived(const Irc::Capabilities& support);
     void onNick(const Irc::User& user, QString newnick);
 
     void on_inputLineEdit_returnPressed();

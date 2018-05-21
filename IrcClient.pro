@@ -16,7 +16,6 @@ SOURCES += main.cpp\
         gui/mainwindow.cpp \
     irc/session.cpp \
     irc/message.cpp \
-    irc/supportinfo.cpp \
     gui/debugform.cpp \
     gui/servercfgdialog.cpp \
     gui/sessionform.cpp \
@@ -26,12 +25,12 @@ SOURCES += main.cpp\
     irc/user.cpp \
     gui/ircchatbuffer.cpp \
     gui/channelform.cpp \
-    irc/hostmask.cpp
+    irc/hostmask.cpp \
+    irc/capabilities.cpp
 
 HEADERS  += gui/mainwindow.h \
     irc/session.h \
     irc/message.h \
-    irc/supportinfo.h \
     gui/debugform.h \
     gui/servercfgdialog.h \
     gui/sessionform.h \
@@ -41,7 +40,8 @@ HEADERS  += gui/mainwindow.h \
     irc/user.h \
     gui/ircchatbuffer.h \
     gui/channelform.h \
-    irc/hostmask.h
+    irc/hostmask.h \
+    irc/capabilities.h
 
 FORMS    += gui/mainwindow.ui \
     gui/debugform.ui \

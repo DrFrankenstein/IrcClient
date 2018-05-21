@@ -4,7 +4,7 @@
 #include <QWidget>
 
 #include "../irc/session.h"
-#include "../irc/supportinfo.h"
+#include "../irc/capabilities.h"
 
 namespace Gui
 {
@@ -23,7 +23,7 @@ public:
 
 private slots:
     void sessionStateChanged(Irc::Session::State state);
-    void onISupportReceived(const Irc::SupportInfo& support);
+    void onISupportReceived(const Irc::Capabilities& support);
     void onJoin(Irc::User& user, QString channel);
     void onNick(Irc::User& user, QString newnick);
 
